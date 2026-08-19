@@ -17,7 +17,7 @@ class DigitalWallet{
   this.balance=initialBalance;
   this.totalTransactions=0;
 }
-
+/*加錢*/
 public boolean deposit(double amount){
   if(amount<=0){
     System.out.printf("加值金額必須大於 0");
@@ -28,7 +28,7 @@ public boolean deposit(double amount){
   System.out.printf("成功加值 $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
   return true;
 }
-
+/*付款*/
 public boolean pay(double amount){
   if(amount<=0){
     System.out.println("付款金額必須大於 0");
@@ -43,3 +43,16 @@ public boolean pay(double amount){
   System.out.printf("成功付款 金額: $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
   return true;
 }
+/*退錢*/
+public boolean refund(double amount){
+  if(amount<=0){
+    System.out.printf("退款金額必須大於 0");
+    return false;
+  }
+  this.balance += amount; 
+  this.totalTransactions++;
+  System.out.printf("成功退款 金額: $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
+  return true;
+}
+/*帳號資料*/
+
