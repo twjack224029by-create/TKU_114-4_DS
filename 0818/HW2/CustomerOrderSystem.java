@@ -21,9 +21,10 @@ class OrderItem{
   private final int quantity;
 
   public  OrderItem(Double itemName,String price, String quantity){
-    this.customerId = customerId;
-    this.name = name;
-    this.email = email;
+    if(price < 0 || quantity <= 0){throw new IllegalArgumentException("價格不能為負且數量必須大於 0");}
+    this.itemName = itemName;
+    this.price = price;
+    this.quantity = quantity;
   }
   
 }
