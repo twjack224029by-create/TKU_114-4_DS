@@ -49,7 +49,35 @@ class CustomerOrder{
   }
 }
 
+public boolean addItem(OrderItem item){
+  if(item == null){
+      System.out.println("失敗,品項不能為空");
+      return false;
+  }
+  if(itemCount >= items.length){
+      System.out.println("失敗,訂單容量已滿，無法新增品項: " + item.getItemName());
+      return false;
+  }
+  items[itemCount] = item;
+  itemCount++;
+  return true;
+}
 
+ public double calculateTotalAmount() {
+        double total = 0;
+        for (int i = 0; i < itemCount; i++) {
+            total += items[i].getSubtotal();
+        }
+        return total;
+    }
+
+public int calculateTotalQuantity() {
+        int totalQty = 0;
+        for (int i = 0; i < itemCount; i++) {
+            totalQty += items[i].getQuantity();
+        }
+        return totalQty;
+    }
 
 
 
