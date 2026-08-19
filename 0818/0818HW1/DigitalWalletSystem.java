@@ -72,6 +72,29 @@ public void printStatus(){
 
 public class DigitalWalletSystem{
   public static void main(String[] args){
-    
+    System.out.println("test start");
+
+    DigitalWallet wallet = new DigitalWallet("W1001", "Alan", 1000.0);
+    wallet.printStatus();
+
+    System.out.println("\n 加值 500 元");
+    wallet.deposit(500.0);
+
+    System.out.println("\n 付款 300 元");
+    wallet.pay(300.0);
+
+    System.out.println("\n 付款失敗測試 餘額不足");
+    wallet.pay(3000.0);
+
+    System.out.println("\n 不合法輸入測試 負數與0");
+    wallet.deposit(-100.0);
+    wallet.pay(-50.0);
+    wallet.refund(0.0);
+
+    System.out.println("\n 退款 200 元");
+    wallet.refund(200.0);
+
+    System.out.println("\n 帳戶狀態");
+    wallet.printStatus();
   }
 }
