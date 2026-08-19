@@ -26,5 +26,17 @@ class OrderItem{
     this.price = price;
     this.quantity = quantity;
   }
-  
+  public String getItemName(){return itemName;}
+  public Double getPrice(){return price;}
+  public String getQuantity(){return quantity;}
+
+  public Double getSubtotal(){return price * quantity;}
 }
+
+
+
+
+
+
+
+
