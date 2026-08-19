@@ -17,3 +17,7 @@ class DigitalWallet{
   this.balance=initialBalance;
   this.totalTransactions=0;
 }
+
+public boolean deposit(double amount){
+  if(){}
+}
