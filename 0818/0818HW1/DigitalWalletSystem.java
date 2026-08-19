@@ -1,24 +1,30 @@
 import java.util.Objects;
 
 class DigitalWallet{
-  private final String Walletid;
+  private final String walletId;
   private final String owner;
   private double balance;
   private int totalTransactions;
 
-  public DigitalWallet(String Walletid,String owner,double initialBalance){
-    if(Walletid == null || Walletid.trim().isEmpty()){throw new IllegalArgumentException("請填寫id");}
-    if(owner == null || owner.trim().isEmpty()){throw new IllegalArgumentException("請輸入姓名");)}
-    if(initialbalance<0){throw new IllegalArgumentException("初始餘額不可為負");}
+  public DigitalWallet(String walletId,String owner,double initialBalance){
+    if (walletId == null || walletId.trim().isEmpty()) {
+            throw new IllegalArgumentException("ID 不能為空");
+        }
+        if (owner == null || owner.trim().isEmpty()) {
+            throw new IllegalArgumentException("姓名不能為空");
+        }
+        if (initialBalance < 0) {
+            throw new IllegalArgumentException("初始餘額不能為負數");
+        }
   }
 
-  this.Walletid=Walletid;
+  this.walletId=walletId;
   this.owner=owner;
   this.balance=initialBalance;
   this.totalTransactions=0;
 }
 
-public String getWalletid(){return Walletid;}
+public String getwalletId(){return Walletid;}
 public String getowner(){return owner;}
 public Double getBalance(){return balance;}
 public int getTotalTransactions(){return totalTransactions;}
