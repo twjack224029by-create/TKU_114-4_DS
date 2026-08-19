@@ -25,6 +25,21 @@ public boolean deposit(double amount){
   }
   this.balance += amount;
   this.totalTransactions++;
-  System.out.printf("成功加值 $%.2f,2; 當前餘額: $%2.f%n",amount,this.balance);
+  System.out.printf("成功加值 $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
+  return true;
+}
+
+public boolean pay(double amount){
+  if(amount<=0){
+    System.out.println("付款金額必須大於 0");
+    return false;
+  }
+  if(amount>this.balance){
+    System.out.printf("餘額不足");
+    return false;
+  }
+  this.balance -= amount; 
+  this.totalTransactions++;
+  System.out.printf("成功付款 金額: $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
   return true;
 }
