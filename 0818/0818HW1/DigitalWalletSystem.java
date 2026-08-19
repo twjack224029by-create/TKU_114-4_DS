@@ -23,4 +23,8 @@ public boolean deposit(double amount){
     System.out.printf("加值金額必須大於 0");
     return false;
   }
+  this.balance += amount;
+  this.totalTransactions++;
+  System.out.printf("成功加值 $%.2f,2; 當前餘額: $%2.f%n",amount,this.balance);
+  return true;
 }
