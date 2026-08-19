@@ -19,5 +19,8 @@ class DigitalWallet{
 }
 
 public boolean deposit(double amount){
-  if(){}
+  if(amount<=0){
+    System.out.printf("加值金額必須大於 0");
+    return false;
+  }
 }
