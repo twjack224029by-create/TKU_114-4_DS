@@ -33,6 +33,21 @@ class OrderItem{
   public Double getSubtotal(){return price * quantity;}
 }
 
+class CustomerOrder{
+  private final String orderId; 
+  private final Customer customer;
+  private final OrderItem[] items;
+  private int itemCount;
+
+  public CustomerOrder(String orderId, Customer customer, int maxItems){
+  if(customer == null){throw new IllegalArgumentException("訂單必須包含有效顧客資料");}
+  if(maxItems <= 0){throw new IllegalArgumentException("訂單品項容量必須大於 0");}
+  this.orderId = orderId;
+  this.customer = customer;
+  this.items = new OrderItem[maxItems];
+  this.itemCount = 0;
+  }
+}
 
 
 
