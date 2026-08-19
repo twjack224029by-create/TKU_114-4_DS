@@ -55,4 +55,8 @@ public boolean refund(double amount){
   return true;
 }
 /*帳號資料*/
-
+public void printStatus(){
+  System.out.printf("錢包id: %s 持有人: %s%n",Walletid,owner);
+  System.out.printf("目前餘額: $%.2f 總交易次數: %d%n",balance,totalTransactions);
+} 
+}
