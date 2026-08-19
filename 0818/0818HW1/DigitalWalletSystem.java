@@ -18,10 +18,10 @@ class DigitalWallet{
         }
   }
 
-  this.walletId=walletId;
-  this.owner=owner;
-  this.balance=initialBalance;
-  this.totalTransactions=0;
+  this.walletId = walletId;
+  this.owner = owner;
+  this.balance = initialBalance;
+  this.totalTransactions = 0;
 }
 
 public String getwalletId(){return Walletid;}
