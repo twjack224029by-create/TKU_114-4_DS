@@ -69,3 +69,9 @@ public void printStatus(){
   System.out.printf("目前餘額: $%.2f 總交易次數: %d%n",balance,totalTransactions);
 } 
 }
+
+public class DigitalWalletSystem{
+  public static void main(String[] args){
+    
+  }
+}
