@@ -1,13 +1,13 @@
 import java.util.Objects;
 
-class DigitalWallet{
-  private final String walletId;
-  private final String owner;
-  private double balance;
-  private int totalTransactions;
+class DigitalWallet {
+    private final String walletId;
+    private final String owner;
+    private double balance;
+    private int totalTransactions;
 
-  public DigitalWallet(String walletId,String owner,double initialBalance){
-    if (walletId == null || walletId.trim().isEmpty()) {
+    public DigitalWallet(String walletId, String owner, double initialBalance) {
+        if (walletId == null || walletId.trim().isEmpty()) {
             throw new IllegalArgumentException("ID 不能為空");
         }
         if (owner == null || owner.trim().isEmpty()) {
@@ -16,91 +16,106 @@ class DigitalWallet{
         if (initialBalance < 0) {
             throw new IllegalArgumentException("初始餘額不能為負數");
         }
-  }
 
-  this.walletId = walletId;
-  this.owner = owner;
-  this.balance = initialBalance;
-  this.totalTransactions = 0;
+        this.walletId = walletId;
+        this.owner = owner;
+        this.balance = initialBalance;
+        this.totalTransactions = 0;
+    }
+
+    public String getWalletId() {
+        return walletId;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public int getTotalTransactions() {
+        return totalTransactions;
+    }
+
+    /*加錢*/
+    public boolean deposit(double amount) {
+        if (amount <= 0) {
+            System.out.println("失敗,儲值金額必須大於 0");
+            return false;
+        }
+        this.balance += amount;
+        this.totalTransactions++;
+        System.out.printf("成功儲值 $%.2f，當前餘額: $%.2f%n", amount, this.balance);
+        return true;
+    }
+
+    /*付款*/
+    public boolean pay(double amount) {
+        if (amount <= 0) {
+            System.out.println("失敗,付款金額必須大於 0");
+            return false;
+        }
+        if (amount > this.balance) {
+            System.out.printf("失敗,餘額不足 嘗試扣款 $%.2f，但當前餘額僅 $%.2f%n", amount, this.balance);
+            return false;
+        }
+        this.balance -= amount;
+        this.totalTransactions++;
+        System.out.printf("成功扣款 $%.2f，當前餘額: $%.2f%n", amount, this.balance);
+        return true;
+    }
+
+    /*退錢*/
+    public boolean refund(double amount) {
+        if (amount <= 0) {
+            System.out.println("失敗,退款金額必須大於 0");
+            return false;
+        }
+        this.balance += amount;
+        this.totalTransactions++;
+        System.out.printf("成功退款 $%.2f，當前餘額: $%.2f%n", amount, this.balance);
+        return true;
+    }
+
+    // 帳戶狀態
+    public void printStatus() { 
+        System.out.printf("錢包 ID: %s  持有者: %s%n", walletId, owner);
+        System.out.printf("目前餘額: $%.2f  總成功交易次數: %d%n", balance, totalTransactions);
+
+    }
 }
 
-public String getwalletId(){return Walletid;}
-public String getowner(){return owner;}
-public Double getBalance(){return balance;}
-public int getTotalTransactions(){return totalTransactions;}
+/*測試*/
+public class DigitalWalletSystem {
+    public static void main(String[] args) {
+        System.out.println("test start");
+        
+        DigitalWallet wallet = new DigitalWallet("W1001", "Alan", 1000.0);
+        wallet.printStatus();
 
-/*加錢*/
-public boolean deposit(double amount){
-  if(amount<=0){
-    System.out.printf("加值金額必須大於 0");
-    return false;
-  }
-  this.balance += amount;
-  this.totalTransactions++;
-  System.out.printf("成功加值 $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
-  return true;
-}
+        System.out.println("\n 儲值 500 元");
+        wallet.deposit(500.0);
 
-/*付款*/
-public boolean pay(double amount){
-  if(amount<=0){
-    System.out.println("付款金額必須大於 0");
-    return false;
-  }
-  if(amount>this.balance){
-    System.out.printf("餘額不足");
-    return false;
-  }
-  this.balance -= amount; 
-  this.totalTransactions++;
-  System.out.printf("成功付款 金額: $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
-  return true;
-}
+        System.out.println("\n 付款 300 元");
+        wallet.pay(300.0);
 
-/*退錢*/
-public boolean refund(double amount){
-  if(amount<=0){
-    System.out.printf("退款金額必須大於 0");
-    return false;
-  }
-  this.balance += amount; 
-  this.totalTransactions++;
-  System.out.printf("成功退款 金額: $%.2f, 當前餘額: $%2.f%n",amount,this.balance);
-  return true;
-}
+        //餘額不足測試 (嘗試支付超過餘額的金額)
+        System.out.println("\n付款失敗餘額不足 (嘗試支付 3000 元)");
+        wallet.pay(3000.0);
 
-/*帳號資料*/
-public void printStatus(){
-  System.out.printf("錢包id: %s 持有人: %s%n",Walletid,owner);
-  System.out.printf("目前餘額: $%.2f 總交易次數: %d%n",balance,totalTransactions);
-} 
-}
+        //負數金額與不法輸入測試
+        System.out.println("\n不法輸入測試");
+        wallet.deposit(-100.0);
+        wallet.pay(-50.0);
+        wallet.refund(0.0);
 
-public class DigitalWalletSystem{
-  public static void main(String[] args){
-    System.out.println("test start");
+        System.out.println("\n正常退款 200 元");
+        wallet.refund(200.0);
 
-    DigitalWallet wallet = new DigitalWallet("W1001", "Alan", 1000.0);
-    wallet.printStatus();
-
-    System.out.println("\n 加值 500 元");
-    wallet.deposit(500.0);
-
-    System.out.println("\n 付款 300 元");
-    wallet.pay(300.0);
-
-    System.out.println("\n 付款失敗測試 餘額不足");
-    wallet.pay(3000.0);
-
-    System.out.println("\n 不合法輸入測試 負數與0");
-    wallet.deposit(-100.0);
-    wallet.pay(-50.0);
-    wallet.refund(0.0);
-
-    System.out.println("\n 退款 200 元");
-    wallet.refund(200.0);
-
-    System.out.println("\n 帳戶狀態");
-    wallet.printStatus();
-  }
+        // 帳戶狀態
+        System.out.println("\n 帳戶狀態");
+        wallet.printStatus();
+    }
 }
