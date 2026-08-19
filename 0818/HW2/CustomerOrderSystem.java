@@ -79,7 +79,25 @@ public int calculateTotalQuantity() {
         return totalQty;
     }
 
+public void printOrderSummary() {
+  System.out.println("訂單編號: " + orderId");
+  System.out.println("顧客姓名: " + customer.getName() + " (" + customer.getEmail() + ")");
+  System.out.println("明細:");
+  if (itemCount == 0) {
+            System.out.println("  (無品項)");
+        } 
+  else {
+            for (int i = 0; i < itemCount; i++) {
+                OrderItem item = items[i];
+                System.out.printf("  %d. %-12s | 單價: $%8.2f | 數量: %2d | 小計: $%8.2f%n",
+                        (i + 1), item.getItemName(), item.getPrice(), item.getQuantity(), item.getSubtotal());
+            }
+        }
 
+  System.out.println("購買品項種類: %d 項%n", itemCount");
+  System.out.println("購買商品總數: %d 件%n", calculateTotalQuantity());
+  System.out.println("訂單總金額:   $%.2f%n", calculateTotalAmount());
+}
 
 
 
