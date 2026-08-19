@@ -99,5 +99,21 @@ public void printOrderSummary() {
   System.out.println("訂單總金額:   $%.2f%n", calculateTotalAmount());
 }
 
+public class CustomerOrderSystem{
+  public static void main(String[] args) {
+        Customer customer = new Customer("C001", "張哥", "test@google.com");
+
+        CustomerOrder order = new CustomerOrder("ORD-0820-09", customer, 3);
+
+        System.out.println("開始新增");
+        order.addItem(new OrderItem("書", 680.0, 1));
+        order.addItem(new OrderItem("線", 450.0, 2));
+        order.addItem(new OrderItem("筆", 80.0, 5));
+
+        order.addItem(new OrderItem("USB", 300.0, 1));
+
+        order.printOrderSummary();
+    }
+}
 
 
