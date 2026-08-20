@@ -12,9 +12,9 @@ class Account{
     this.ownerName = ownerName;
     this.balance = balance;
   }
-  public String get(AccountNumber){return accountNumber;}
-  public String get(OwnerName){return ownerName;}
-  public int get(Balance){return balance;}
+  public String getAccountNumber(){return accountNumber;}
+  public String getOwnerName(){return ownerName;}
+  public int getBalance(){return balance;}
 
   void withdraw(int amount) {
         this.balance -= amount;
@@ -55,5 +55,47 @@ class TransferService{
   }
 }
 
+public class AccountTransferService{
+  public static void main(String[] args){
+    System.out.println("test start\n");
+     Account acc1 = new Account("A-1", "Alan", 1000);
+     Account acc2 = new Account("B-2", "Walker", 500);
+
+    System.out.println("帳戶狀態");
+    System.out.println("帳戶 1: " + acc1);
+    System.out.println("帳戶 2: " + acc2);
+
+    System.out.println("\n 轉帳 $300 (Alan -> Walker)");
+    boolean result1 = TransferService.transfer(acc1, acc2, 300);
+    System.out.println("轉帳結果: " + (result1 ? "成功" : "失敗"));
+    System.out.println("帳戶 1: " + acc1);
+    System.out.println("帳戶 2: " + acc2);
+
+    System.out.println("\n 餘額不足轉帳");
+    boolean result2 = TransferService.transfer(acc1, acc2, 2000);
+    System.out.println("轉帳結果: " + (result2 ? "成功" : "失敗"));
+    System.out.println("帳戶 1 ($不變): " + acc1);
+    System.out.println("帳戶 2 ($不變): " + acc2);
+
+    System.out.println("\n 同帳戶轉帳");
+    boolean result3 = TransferService.transfer(acc1, acc1, 100);
+    System.out.println("轉帳結果: " + (result3 ? "成功" : "失敗"));
+    System.out.println("帳戶 1 ($不變): " + acc1);
+
+    System.out.println("\n 帳戶空輸入");
+    boolean result4 = TransferService.transfer(acc1, null, 100);
+    System.out.println("轉帳結果: " + (result4 ? "成功" : "失敗"));
+    System.out.println("帳戶 1 (餘額應保持不變): " + acc1);
+
+    System.out.println("\n 轉帳無效金額");
+    boolean result5 = TransferService.transfer(acc1, acc2, -50);
+    System.out.println("轉帳結果: " + (result5 ? "成功" : "失敗"));
+    System.out.println("帳戶 1 ($不變): " + acc1);
+
+    System.out.println("帳戶狀態");
+    System.out.println("帳戶 1: " + acc1);
+    System.out.println("帳戶 2: " + acc2);
+  }
+}
 
 
