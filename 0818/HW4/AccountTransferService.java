@@ -4,7 +4,12 @@ class Account{
   private final String ownerName;
   private int balance;
 
-  public Account{
-    
+  public Account(String accountNumber, String ownerName, int initialBalance){
+    if(){}
+    if(){}
+    if(){}
+    this. =;
+    this. =;
+    this. =;
   }
 }
