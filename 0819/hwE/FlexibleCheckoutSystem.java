@@ -98,3 +98,24 @@ class CheckoutResult {
                 orderId, originalPrice, finalPrice, notificationStatus ? "成功" : "失敗");
     }
 }
+
+class CheckoutService {
+    private final PricingPolicy pricing;
+    private final NotificationChannel channel;
+
+    public CheckoutService(PricingPolicy pricing, NotificationChannel channel) {
+        this.pricing = pricing;
+        this.channel = channel;
+    }
+
+    public CheckoutResult checkout(String orderId, int originalPrice, String receiver) {
+        if (orderId == null || orderId.isBlank() || originalPrice < 0) {
+            return new CheckoutResult(orderId, originalPrice, 0, false);
+        }
+
+        int finalPrice = pricing.finalPrice(originalPrice);
+        boolean status = channel.send(receiver, "order=" + orderId + ", amount=" + finalPrice);
+
+        return new CheckoutResult(orderId, originalPrice, finalPrice, status);
+    }
+}
