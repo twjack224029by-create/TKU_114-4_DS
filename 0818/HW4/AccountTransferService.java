@@ -15,4 +15,11 @@ class Account{
   public String get(){return;}
   public String get(){return;}
   public int get(){return;}
+
+  void withdraw(int amount) {
+        this.balance -= amount;
+    }
+  void deposit(int amount) {
+        this.balance += amount;
+    }
 }
