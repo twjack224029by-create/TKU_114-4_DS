@@ -30,10 +30,22 @@ class Account{
 
 class TransferService{
   public static boolean transfer(Account source, Account target, int amount){
-    if(){}
-    if(){}
-    if(){}
-    if(){}
+    if(source == null || target == null){
+            System.out.println("失敗,轉出或轉入帳戶不得為 null");
+            return false;
+    }
+    if(source == target){
+            System.out.println("失敗,無法轉帳給相同帳戶");
+            return false;
+    }
+    if(amount <= 0){
+            System.out.printf("失敗,轉帳金額無效 ($%d)，金額必須大於 0%n", amount);
+            return false;
+    }
+    if(source.getBalance() < amount){
+            System.out.printf("失敗,轉出帳戶餘額不足 (當前餘額: $%d, 欲轉帳金額: $%d)%n", source.getBalance(), amount);
+            return false;
+    }
     source.withdraw(amount);
     target.deposit(amount);
 
