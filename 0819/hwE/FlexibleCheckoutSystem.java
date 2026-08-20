@@ -119,3 +119,43 @@ class CheckoutService {
         return new CheckoutResult(orderId, originalPrice, finalPrice, status);
     }
 }
+
+public class FlexibleCheckoutSystem {
+    public static void main(String[] args) {
+        System.out.println("彈性結帳與通知系統測試\n");
+
+        System.out.println(" StandardPricing + EmailChannel");
+        CheckoutService service1 = new CheckoutService(new StandardPricing(), new EmailChannel());
+        CheckoutResult res1 = service1.checkout("ORD-001", 1000, "user1@example.com");
+        System.out.println("結果: " + res1 + "\n");
+
+        System.out.println("StandardPricing + SmsChannel");
+        CheckoutService service2 = new CheckoutService(new StandardPricing(), new SmsChannel());
+        CheckoutResult res2 = service2.checkout("ORD-002", 1500, "0912345678");
+        System.out.println("結果: " + res2 + "\n");
+
+        System.out.println("VipPricing + EmailChannel");
+        CheckoutService service3 = new CheckoutService(new VipPricing(), new EmailChannel());
+        CheckoutResult res3 = service3.checkout("ORD-003", 2000, "vip@example.com");
+        System.out.println("結果: " + res3 + "\n");
+
+        System.out.println(" VipPricing + ConsoleChannel");
+        CheckoutService service4 = new CheckoutService(new VipPricing(), new ConsoleChannel());
+        CheckoutResult res4 = service4.checkout("ORD-004", 3000, "AdminConsole");
+        System.out.println("結果: " + res4 + "\n");
+
+        System.out.println("ThresholdDiscountPricing + SmsChannel");
+        CheckoutService service5 = new CheckoutService(new ThresholdDiscountPricing(), new SmsChannel());
+        CheckoutResult res5 = service5.checkout("ORD-005", 2500, "0987654321");
+        System.out.println("結果: " + res5 + "\n");
+
+        System.out.println("ThresholdDiscountPricing + ConsoleChannel");
+        CheckoutService service6 = new CheckoutService(new ThresholdDiscountPricing(), new ConsoleChannel());
+        CheckoutResult res6 = service6.checkout("ORD-006", 1800, "StoreTerminal");
+        System.out.println("結果: " + res6 + "\n");
+
+        System.out.println("Email格式錯誤");
+        CheckoutResult res7 = service1.checkout("ORD-007", 500, "invalid-email-address");
+        System.out.println("結果: " + res7);
+    }
+}
