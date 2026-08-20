@@ -28,6 +28,20 @@ class Account{
     }
 }
 
+class TransferService{
+  public static boolean transfer(Account source, Account target, int amount){
+    if(){}
+    if(){}
+    if(){}
+    if(){}
+    source.withdraw(amount);
+    target.deposit(amount);
+
+    System.out.printf("成功從 [%s] 轉帳 $%d 至 [%s]%n",
+    source.getAccountNumber(), amount, target.getAccountNumber());
+    return true;
+  }
+}
 
 
 
