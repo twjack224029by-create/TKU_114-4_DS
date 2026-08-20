@@ -46,6 +46,59 @@ class Wallet{
     this.transactionCount = 0;
     this.globalSequence = 1;
   }
+  public String getWalletId() {
+        return walletId;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+  private boolean recordTransaction(String type, double amount) {
+        if (transactionCount >= transactions.length) {
+            System.out.printf("失敗,錢包 [%s] 的交易紀錄容量已滿，無法寫入新紀錄！%n", walletId);
+            return false;
+        }
+        transactions[transactionCount] = new Transaction(globalSequence++, type, amount);
+        transactionCount++;
+        return true;
+    }
+
+  public boolean deposit(double amount) {
+        if (amount <= 0) return false;
+        if (transactionCount >= transactions.length) {
+            System.out.printf("失敗,錢包 [%s] 紀錄容量已滿，不得修改餘額%n", walletId);
+            return false;
+        }
+        this.balance += amount;
+        recordTransaction("DEPOSIT", amount);
+        return true;
+    }
+  public boolean pay(double amount) {
+        if (amount <= 0 || amount > balance) return false;
+        if (transactionCount >= transactions.length) {
+            System.out.printf("失敗,錢包 [%s] 紀錄容量已滿，不得修改餘額%n", walletId);
+            return false;
+        }
+        this.balance -= amount;
+        recordTransaction("PAY", amount);
+        return true;
+    }
+
+  public boolean refund(double amount) {
+        if (amount <= 0) return false;
+        if (transactionCount >= transactions.length) {
+            System.out.printf("失敗,錢包 [%s] 紀錄容量已滿，不得修改餘額%n", walletId);
+            return false;
+        }
+        this.balance += amount;
+        recordTransaction("REFUND", amount);
+        return true;
+    }
 }
 
 
