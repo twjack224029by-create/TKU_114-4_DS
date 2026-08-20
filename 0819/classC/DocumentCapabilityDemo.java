@@ -33,3 +33,28 @@ class BackupDocument implements Exportable, Compressible {
     }
 }
 
+public class DocumentCapabilityDemo {
+    public static void main(String[] args) {
+        System.out.println("測試");
+
+        BackupDocument myDoc = new BackupDocument("test.docx");
+」
+        Exportable exp = myDoc;      
+        Compressible com = myDoc;    
+
+        System.out.println("exp 和 com 是不是指向同一個物件？");
+        System.out.println(exp == com); 
+
+        System.out.println("\n測試呼叫功能");
+
+        exp.exportToFile("/Users/student/Desktop");
+
+        com.compress("ZIP");
+
+        System.out.println("\n 原始型態 myDoc 呼叫");
+        myDoc.exportToFile("/Users/student/Desktop");
+        myDoc.compress("RAR");
+        myDoc.printName();
+
+    }
+}
