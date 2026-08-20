@@ -145,7 +145,64 @@ class Wallet{
         return total;
    }
 
-  
+  public void printStatement() {
+        System.out.printf("             對 帳 單             %n");
+        System.out.printf("錢包 ID: %-10s  持有者: %s%n", walletId, owner);
+        System.out.printf("當前餘額: $%.2f  總交易筆數: %d / %d%n", balance, transactionCount, transactions.length);
+        System.out.println("交易明細列印:");
+        
+        if (transactionCount == 0) {
+            System.out.println("  (無任何交易紀錄)");
+        } else {
+            for (int i = 0; i < transactionCount; i++) {
+                System.out.println(transactions[i]);
+            }
+        }
+    }
+}
+
+public class WalletHistoryManager {
+    public static void main(String[] args) {
+        System.out.println("test \n");
+
+        Wallet walletA = new Wallet("W-A101", "Alice", 1000.0, 4);
+        Wallet walletB = new Wallet("W-B202", "Bob", 500.0, 4);
+
+        walletA.deposit(500.0);
+        walletA.pay(200.0);
+
+        walletA.transferTo(walletB, 300.0);
+
+        System.out.println("\n test findTransaction ");
+        Transaction t2 = walletA.findTransaction(2);
+        if (t2 != null) {
+            System.out.println("找到序號 #2 交易: " + t2);
+        } else {
+            System.out.println("找不到序號 #2 的交易");
+        }
+
+        Transaction t99 = walletA.findTransaction(99);
+        System.out.println("搜尋序號 #99 結果: " + (t99 != null ? t99 : "null (未找到)"));
+
+        System.out.println("\n test totalByType ");
+        System.out.printf("Alice 的 DEPOSIT 總金額: $%.2f%n", walletA.totalByType("DEPOSIT"));
+        System.out.printf("Alice 的 PAY 總金額: $%.2f%n", walletA.totalByType("PAY"));
+        System.out.printf("Alice 的 TRANSFER_OUT 總金額: $%.2f%n", walletA.totalByType("TRANSFER_OUT"));
+
+        System.out.println("\n test容量max,邊界保護");
+        walletA.refund(100.0); 
+        
+        double balanceBefore = walletA.getBalance();
+        System.out.printf("第 5 筆交易前餘額: $%.2f%n", balanceBefore);
+
+        boolean paySuccess = walletA.pay(50.0);
+        System.out.printf("第 5 筆付款嘗試結果: %s | 扣款後餘額: $%.2f%n", 
+                paySuccess ? "成功" : "失敗 (遭到拒絕)", walletA.getBalance());
+
+        System.out.println("\n");
+        walletA.printStatement();
+        walletB.printStatement();
+    }
 }
 
 
