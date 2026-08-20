@@ -29,3 +29,36 @@ class ThresholdDiscountPricing implements PricingPolicy {
 }
 
 
+interface NotificationChannel {
+    boolean send(String receiver, String message);
+}
+
+class EmailChannel implements NotificationChannel {
+    @Override
+    public boolean send(String receiver, String message) {
+        if (receiver == null || !receiver.contains("@")) {
+            return false;
+        }
+        System.out.println("EMAIL " + receiver + " -> " + message);
+        return true;
+    }
+}
+
+class ConsoleChannel implements NotificationChannel {
+    @Override
+    public boolean send(String receiver, String message) {
+        System.out.println("CONSOLE " + receiver + " -> " + message);
+        return true;
+    }
+}
+
+class SmsChannel implements NotificationChannel {
+    @Override
+    public boolean send(String receiver, String message) {
+        if (receiver == null || receiver.trim().length() < 8) {
+            return false;
+        }
+        System.out.println("SMS " + receiver + " -> " + message);
+        return true;
+    }
+}
