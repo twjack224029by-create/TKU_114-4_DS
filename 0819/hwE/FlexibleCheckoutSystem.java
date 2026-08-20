@@ -62,3 +62,39 @@ class SmsChannel implements NotificationChannel {
         return true;
     }
 }
+
+class CheckoutResult {
+    private final String orderId;
+    private final int originalPrice;
+    private final int finalPrice;
+    private final boolean notificationStatus;
+
+    public CheckoutResult(String orderId, int originalPrice, int finalPrice, boolean notificationStatus) {
+        this.orderId = orderId;
+        this.originalPrice = originalPrice;
+        this.finalPrice = finalPrice;
+        this.notificationStatus = notificationStatus;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public int getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public int getFinalPrice() {
+        return finalPrice;
+    }
+
+    public boolean isNotificationStatus() {
+        return notificationStatus;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("CheckoutResult { 訂單: %s  原價: $%d  折扣價: $%d  發送狀態: %s }",
+                orderId, originalPrice, finalPrice, notificationStatus ? "成功" : "失敗");
+    }
+}
