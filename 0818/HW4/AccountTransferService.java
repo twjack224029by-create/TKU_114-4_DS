@@ -12,4 +12,7 @@ class Account{
     this. =;
     this. =;
   }
+  public String get(){return;}
+  public String get(){return;}
+  public int get(){return;}
 }
