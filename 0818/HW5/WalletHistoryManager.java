@@ -99,6 +99,53 @@ class Wallet{
         recordTransaction("REFUND", amount);
         return true;
     }
+
+  public boolean transferTo(Wallet target, double amount) {
+        if (target == null || target == this || amount <= 0 || amount > this.balance) {
+            System.out.println("失敗,轉帳條件不符 (無效金額、目標錯誤或餘額不足)");
+            return false;
+        }
+
+        if (this.transactionCount >= this.transactions.length) {
+            System.out.printf("失敗,來源錢包 [%s] 交易紀錄已滿%n", this.walletId);
+            return false;
+        }
+        if (target.transactionCount >= target.transactions.length) {
+            System.out.printf("失敗,目標錢包 [%s] 交易紀錄已滿%n", target.walletId);
+            return false;
+        }
+
+        this.balance -= amount;
+        target.balance += amount;
+
+        this.recordTransaction("TRANSFER_OUT", amount);
+        target.recordTransaction("TRANSFER_IN", amount);
+
+        System.out.printf("成功從 [%s] 轉出 $%.2f 至 [%s]%n", this.owner, amount, target.owner);
+        return true;
+    }
+
+  public Transaction findTransaction(int sequence) {
+        for (int i = 0; i < transactionCount; i++) {
+            if (transactions[i].getSequence() == sequence) {
+                return transactions[i];
+            }
+        }
+        return null;
+    }
+  
+  public double totalByType(String type) {
+        if (type == null) return 0.0;
+        double total = 0.0;
+        for (int i = 0; i < transactionCount; i++) {
+            if (type.equalsIgnoreCase(transactions[i].getType())) {
+                total += transactions[i].getAmount();
+            }
+        }
+        return total;
+   }
+
+  
 }
 
 
