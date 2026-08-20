@@ -32,3 +32,26 @@ class Bus extends Transport {
     }
 }
 
+class Taxi extends Transport {
+    private static final int BASE_FARE = 85;
+    private static final double BASE_DISTANCE = 1.2;
+    private static final double STEP_DISTANCE = 0.5;
+    private static final int STEP_FARE = 5;
+
+    public Taxi(String routeName) {
+        super(routeName);
+    }
+
+    @Override
+    public int calculateFare(int distance) {
+        if (distance <= 0) return 0;
+        if (distance <= BASE_DISTANCE) {
+            return BASE_FARE;
+        }
+        
+        double extraDistance = distance - BASE_DISTANCE;
+        int steps = (int) Math.ceil(extraDistance / STEP_DISTANCE);
+        return BASE_FARE + (steps * STEP_FARE);
+    }
+}
+
