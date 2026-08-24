@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Protuct{
+class Product{
     private String id;
     private String name;
     private double price;
@@ -96,6 +96,26 @@ public class GenericRepositorySystem {
         stringRepo.add("資料結構與演算法");
         stringRepo.add("雲端運算概論");
         stringRepo.printAll();
+
+        System.out.println("取得索引內容: " + stringRepo.get(1));
+        stringRepo.remove("雲端運算概論");
+        stringRepo.printAll();
+
+        System.out.println("test Repository<Product>");
+        Repository<Product> productRepo = new Repository<>();
+
+        Product p1 = new Product("P001", "MacBook Pro 16", 79900);
+        Product p2 = new Product("P002", "iPhone 16 Pro", 36900);
+        Product p3 = new Product("P003", "AirPods Pro", 7490);
+
+        productRepo.add(p1);
+        productRepo.add(p2);
+        productRepo.add(p3);
+        productRepo.printAll();
+
+        productRepo.remove(0);
+        productRepo.get(10);
+        productRepo.printAll();
     }
 }
 
