@@ -167,5 +167,53 @@ public class CourseCollectionManager {
 
         CourseEnrollment s106 = new CourseEnrollment("S106", "Frank", 78);
         s106.addTag("");
+
+         CourseEnrollment duplicateS101 = new CourseEnrollment("S101", "Amy_Dup", 100);
+
+        System.out.println("報名test");
+        System.out.println("S101 報名: " + book.enroll(s101));
+        System.out.println("S101 重複學號報名 (預期失敗): " + book.enroll(duplicateS101));
+        System.out.println("S102 報名: " + book.enroll(s102));
+        System.out.println("S103 報名: " + book.enroll(s103));
+        System.out.println("S104 報名: " + book.enroll(s104));
+        System.out.println("S105 報名: " + book.enroll(s105));
+        System.out.println("S106 報名: " + book.enroll(s106));
+        System.out.println("目前成功報名總人數: " + book.size());
+
+         System.out.println("\n 更新成績test");
+        System.out.println("更新前 S102: " + book.find("S102"));
+        book.updateScore("S102", 65);
+        System.out.println("更新後 S102 (55 -> 65): " + book.find("S102"));
+
+        System.out.println("\n 標籤搜尋test ");
+        List<CourseEnrollment> javaStudents = book.findByTag("java");
+        for (CourseEnrollment e : javaStudents) {
+            System.out.println("- " + e);
+        }
+
+        System.out.println("成績等級統計");
+        System.out.println("成績分佈統計: " + book.scoreDistribution());
+
+        System.out.println("\n top tank test");
+        System.out.println("前 3 名學生 (含同分):");
+        for (CourseEnrollment e : book.top(3)) {
+            System.out.println("- " + e);
+        }
+
+        System.out.println("\n 要求Top量大於總人數時:");
+        System.out.println("回傳人數: " + book.top(10).size());
+
+        System.out.println("\n 移除低於60分");
+        System.out.println("清理前總人數: " + book.size());
+        book.removeBelow(60);
+        System.out.println("清理後總人數: " + book.size());
+
+        System.out.println("清理後完整排名:");
+        for (CourseEnrollment e : book.ranking()) {
+            System.out.println("- " + e);
+        }
+
+        System.out.println("驗證包含檢測 - Map 搜尋 S105: " + book.find("S105"));
+        System.out.println("驗證重新報名 - 被刪除的 S105 重新報名: " + book.enroll(new CourseEnrollment("S105", "Emma_New", 80)));
     }
 }
