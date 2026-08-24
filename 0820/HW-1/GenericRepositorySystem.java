@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Product{
+class Product {
     private String id;
     private String name;
     private double price;
@@ -11,17 +11,19 @@ class Product{
         this.name = name;
         this.price = Math.max(0, price);
     }
-  
-    public String get() {
+
+    public String getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
-    public Double getPrice() {
+
+    public double getPrice() {
         return price;
     }
-  
+
     @Override
     public String toString() {
         return String.format("Product[ID=%s, 名稱=%s, 價格=%.0f]", id, name, price);
@@ -34,11 +36,11 @@ class Repository<T> {
     public Repository() {
         this.items = new ArrayList<>();
     }
-    
-     public void add(T item) {
+
+    public void add(T item) {
         if (item != null) {
             items.add(item);
-            System.out.println("-> 已新增: " + item);
+            System.out.println("已新增: " + item);
         }
     }
 
@@ -46,16 +48,16 @@ class Repository<T> {
         if (index >= 0 && index < items.size()) {
             return items.get(index);
         }
-        System.out.println("索引 Out of Bounds: " + index);
+        System.out.println("索引Out of Bounds: " + index);
         return null;
     }
 
     public boolean remove(T item) {
         boolean result = items.remove(item);
         if (result) {
-            System.out.println("已成功移除: " + item);
+            System.out.println("成功移除: " + item);
         } else {
-            System.out.println("找不到欲刪除的項目: " + item);
+            System.out.println("找不到刪除項目: " + item);
         }
         return result;
     }
@@ -70,14 +72,15 @@ class Repository<T> {
         return null;
     }
 
-    public int size() {return items.size();}
+    public int size() {
+        return items.size();
+    }
 
     public void printAll() {
         System.out.println("Repository內容 (共 " + size() + " 筆)");
         if (items.isEmpty()) {
-            System.out.println("(無任何資料)");
-        } 
-        else {
+            System.out.println("(無資料)");
+        } else {
             for (int i = 0; i < items.size(); i++) {
                 System.out.println(" [" + i + "] " + items.get(i));
             }
@@ -87,7 +90,7 @@ class Repository<T> {
 
 public class GenericRepositorySystem {
     public static void main(String[] args) {
-        System.out.println("Repository<T> test\n");
+        System.out.println("Repository<T>test\n");
 
         System.out.println("test Repository<String>");
         Repository<String> stringRepo = new Repository<>();
@@ -97,11 +100,11 @@ public class GenericRepositorySystem {
         stringRepo.add("雲端運算概論");
         stringRepo.printAll();
 
-        System.out.println("取得索引內容: " + stringRepo.get(1));
+        System.out.println("索引1的內容: " + stringRepo.get(1));
         stringRepo.remove("雲端運算概論");
         stringRepo.printAll();
 
-        System.out.println("test Repository<Product>");
+        System.out.println("test測試 Repository<Product>");
         Repository<Product> productRepo = new Repository<>();
 
         Product p1 = new Product("P001", "MacBook Pro 16", 79900);
@@ -113,9 +116,9 @@ public class GenericRepositorySystem {
         productRepo.add(p3);
         productRepo.printAll();
 
-        productRepo.remove(0);
-        productRepo.get(10);
+        productRepo.remove(0); 
+        productRepo.get(10);  
+
         productRepo.printAll();
     }
 }
-
