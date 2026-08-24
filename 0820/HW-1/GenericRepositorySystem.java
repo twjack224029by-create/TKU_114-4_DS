@@ -85,4 +85,17 @@ class Repository<T> {
     }
 }
 
+public class GenericRepositorySystem {
+    public static void main(String[] args) {
+        System.out.println("Repository<T> test\n");
+
+        System.out.println("test Repository<String>");
+        Repository<String> stringRepo = new Repository<>();
+
+        stringRepo.add("Java 程式設計");
+        stringRepo.add("資料結構與演算法");
+        stringRepo.add("雲端運算概論");
+        stringRepo.printAll();
+    }
+}
 
