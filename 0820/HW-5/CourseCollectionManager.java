@@ -90,3 +90,54 @@ class RegistrationBook {
         }
         return result;
     }
+
+    Map<String, Integer> scoreDistribution() {
+        Map<String, Integer> dist = new LinkedHashMap<>();
+        dist.put("A", 0);
+        dist.put("B", 0);
+        dist.put("C", 0);
+        dist.put("D", 0);
+        dist.put("F", 0);
+
+        for (CourseEnrollment enrollment : order) {
+            int score = enrollment.getScore();
+            if (score >= 90) dist.put("A", dist.get("A") + 1);
+            else if (score >= 80) dist.put("B", dist.get("B") + 1);
+            else if (score >= 70) dist.put("C", dist.get("C") + 1);
+            else if (score >= 60) dist.put("D", dist.get("D") + 1);
+            else dist.put("F", dist.get("F") + 1);
+        }
+        return dist;
+    }
+
+    List<CourseEnrollment> ranking() {
+        List<CourseEnrollment> result = new ArrayList<>(order);
+        result.sort(Comparator.comparingInt(CourseEnrollment::getScore)
+                .reversed()
+                .thenComparing(CourseEnrollment::getStudentId));
+        return result;
+    }
+
+    List<CourseEnrollment> top(int count) {
+        List<CourseEnrollment> sorted = ranking();
+        if (count <= 0) {
+            return new ArrayList<>();
+        }
+        int limit = Math.min(count, sorted.size());
+        return new ArrayList<>(sorted.subList(0, limit));
+    }
+
+    void removeBelow(int minimum) {
+        order.removeIf(enrollment -> enrollment.getScore() < minimum);
+        registeredIds.clear();
+        byId.clear();
+        for (CourseEnrollment enrollment : order) {
+            registeredIds.add(enrollment.getStudentId());
+            byId.put(enrollment.getStudentId(), enrollment);
+        }
+    }
+
+    int size() {
+        return order.size();
+    }
+}
