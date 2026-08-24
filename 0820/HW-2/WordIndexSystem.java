@@ -6,15 +6,16 @@ import java.util.Map;
 import java.util.Set;
 
 public class WordIndexSystem {
-  public static void main(String[] args) {
-    
-    String[] sentences = {
+
+    public static void main(String[] args) {
+
+        String[] sentences = {
             "Java is a high-level, class-based, object-oriented programming language.",
             "Java is designed to have as few implementation dependencies as possible.",
             "Object-oriented programming is a programming paradigm based on the concept of objects."
         };
-    
-    Map<String, Integer> wordCountMap = new HashMap<>();
+
+        Map<String, Integer> wordCountMap = new HashMap<>();
         Set<String> frequentWordsSet = new HashSet<>();
 
         System.out.println("輸入原始文檔");
@@ -22,7 +23,7 @@ public class WordIndexSystem {
             System.out.println("- " + sentence);
         }
 
-    for (String sentence : sentences) {
+        for (String sentence : sentences) {
             String cleanedSentence = sentence.replaceAll("[,.]", "").toLowerCase();
 
             String[] words = cleanedSentence.split("\\s+");
@@ -40,5 +41,14 @@ public class WordIndexSystem {
                 }
             }
         }
-  }
+
+        System.out.println("\n 所有單字出現次數統計");
+        for (Map.Entry<String, Integer> entry : wordCountMap.entrySet()) {
+            System.out.printf("%-18s : %d 次%n", entry.getKey(), entry.getValue());
+        }
+
+        System.out.println("出現至少兩次的不重複單字");
+        System.out.println("符合條件的單字數量: " + frequentWordsSet.size());
+        System.out.println("單字清單: " + frequentWordsSet);
+    }
 }
