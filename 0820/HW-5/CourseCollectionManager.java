@@ -141,3 +141,31 @@ class RegistrationBook {
         return order.size();
     }
 }
+
+public class CourseCollectionManager {
+    public static void main(String[] args) {
+        System.out.println("CourseCollectionManager test\n");
+
+        RegistrationBook book = new RegistrationBook();
+
+        CourseEnrollment s101 = new CourseEnrollment("S101", "Amy", 88);
+        s101.addTag("Java");
+        s101.addTag("  "); 
+
+        CourseEnrollment s102 = new CourseEnrollment("S102", "Ben", 55);
+        s102.addTag("Python");
+
+        CourseEnrollment s103 = new CourseEnrollment("S103", "Cara", 92);
+        s103.addTag("Java");
+        s103.addTag("Tree");
+
+        CourseEnrollment s104 = new CourseEnrollment("S104", "David", 92); // 與 S103 同分 (92)
+        s104.addTag("Java");
+
+        CourseEnrollment s105 = new CourseEnrollment("S105", "Emma", 45);
+        s105.addTag("C++");
+
+        CourseEnrollment s106 = new CourseEnrollment("S106", "Frank", 78);
+        s106.addTag("");
+    }
+}
