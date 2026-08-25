@@ -55,3 +55,53 @@ class TaskLinkedList {
         }
         return false;
     }
+
+    public boolean addFirst(Task task) {
+        if (task == null || containsId(task.getId())) {
+            System.out.println("失敗,Task 為空或 ID [" + (task != null ? task.getId() : "null") + "] 已存在");
+            return false;
+        }
+
+        TaskNode newNode = new TaskNode(task);
+        newNode.next = head;
+        head = newNode;
+        size++;
+        System.out.println("-> [addFirst] 成功加入: " + task);
+        return true;
+    }
+
+    public boolean addLast(Task task) {
+        if (task == null || containsId(task.getId())) {
+            System.out.println("失敗,Task 為空或 ID [" + (task != null ? task.getId() : "null") + "] 已存在");
+            return false;
+        }
+
+        TaskNode newNode = new TaskNode(task);
+        if (head == null) {
+            head = newNode;
+        } else {
+            TaskNode current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+        size++;
+        System.out.println("-> [addLast] 成功加入: " + task);
+        return true;
+    }
+
+    public Task findById(String id) {
+        if (id == null) return null;
+        TaskNode current = head;
+        while (current != null) {
+            if (current.task.getId().equalsIgnoreCase(id)) {
+                return current.task;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+
+}
+
