@@ -44,4 +44,26 @@ public class TextEditorHistory {
         System.out.println("   Undo Stack: " + undoStack);
         System.out.println("   Redo Stack: " + redoStack);
     }
+
+    public static void main(String[] args) {
+        System.out.println("Undo/Redo test \n");
+        TextEditorHistory editor = new TextEditorHistory();
+
+        editor.type("Hello");
+        editor.type(" World");
+        editor.type("!");
+
+        editor.undo(); 
+        editor.undo(); 
+
+        editor.redo(); 
+
+        editor.type(" Java");
+
+        editor.redo();
+
+        editor.undo();
+        editor.undo();
+        editor.undo(); 
+    }
 }
