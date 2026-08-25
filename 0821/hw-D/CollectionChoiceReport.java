@@ -54,5 +54,32 @@ public class CollectionChoiceReport {
     System.out.println("查詢不存在學號 S999: " + studentScores.get("S999"));
     System.out.println("操作結果: " + studentScores);
 
+    System.out.println("依序處理列印工作");
+    System.out.println("選擇 Interface: Queue");
+    System.out.println("選擇 Implementation: ArrayDeque");
+    System.out.println("原因: 需要先進先出 (FIFO) 的結構，後來的列印工作必須排在後方處理。");
+
+    Queue<String> printJobs = new ArrayDeque<>();
+    printJobs.offer("Doc1_Homework.pdf");
+    printJobs.offer("Doc2_Report.docx");
+    printJobs.offer("Doc3_Image.png");
+
+    System.out.println("加入 3 個列印工作");
+    System.out.println("處理下一個工作 (poll): " + printJobs.poll());
+    System.out.println("剩餘等待列印工作: " + printJobs);
+
+    System.out.println("復原最近操作");
+    System.out.println("選擇 Interface: Deque (用作 Stack)");
+    System.out.println("選擇 Implementation: ArrayDeque");
+    System.out.println("原因: 需要後進先出 (LIFO) 的堆疊行為，優先取回並復原最後發生的動作。");
+
+    Deque<String> actionHistory = new ArrayDeque<>();
+    actionHistory.push("輸入文字 'Hello'");
+    actionHistory.push("修改字體大小");
+    actionHistory.push("刪除段落");
+
+    System.out.println("堆疊加入 3 個操作紀錄");
+    System.out.println("執行復原 Undo (pop): " + actionHistory.pop());
+    System.out.println("剩餘操作紀錄 Stack: " + actionHistory);
   }
 }
