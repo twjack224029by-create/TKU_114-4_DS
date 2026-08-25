@@ -71,13 +71,49 @@ public class ClinicQueueSystem {
         return next;
     }
 
+    public void printCompletedList() {
+        System.out.println("\n 本日已完成看診清單 (共 " + completedList.size() + " 人)");
+        if (completedList.isEmpty()) {
+            System.out.println("(無紀錄)");
+        } else {
+            for (int i = 0; i < completedList.size(); i++) {
+                System.out.println((i + 1) + ". " + completedList.get(i));
+            }
+        }
+    }
+
+    public void printQueueStatus() {
+        System.out.println("目前候診隊列 (FIFO, 共 " + waitingQueue.size() + " 人): " + waitingQueue);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("掛號系統 test \n");
+        ClinicQueueSystem clinic = new ClinicQueueSystem();
+
+        clinic.register("P001", "陳小明");
+        clinic.register("P002", "林美麗");
+        clinic.register("P003", "張大衛");
+        clinic.register("P004", "黃志強");
+
+        System.out.println("\n[測試查看下一位]");
+        clinic.peekNext();
+
+        System.out.println("\n[測試叫號]");
+        clinic.callNext();
+        clinic.callNext();
+
+        System.out.println("\n[測試取消指定病歷號]");
+        clinic.cancelRegistration("P003");
+
+        clinic.cancelRegistration("P999");
+
+        System.out.println("\n[測試繼續叫號]");
+        clinic.callNext(); 
+
+        System.out.println("\n[測試隊列為空時叫號]");
+        clinic.callNext();
+
+        clinic.printCompletedList();
+    }
     
 }
-
-
-
-
-
-
-
-
