@@ -118,7 +118,39 @@ public class DeliveryWorkflowSystem {
         System.out.println("   [Queue 等待中]: " + waitingQueue);
         System.out.println("   [Stack 已完成]: " + completedStack);
     }
-    
+
+    public static void main(String[] args) {
+        System.out.println("DeliveryWorkflowSystem test \n");
+        DeliveryWorkflowSystem system = new DeliveryWorkflowSystem();
+
+
+        system.addDelivery("PKG001", "台北市");
+        system.addDelivery("PKG002", "新北市");
+        system.addDelivery("PKG003", "台中市");
+
+        System.out.println("\n[測試重複 ID 阻擋]");
+        system.addDelivery("PKG001", "高雄市");
+
+        System.out.println("\n[測試依編號查詢]");
+        system.findById("PKG002");
+        system.findById("PKG999"); 
+
+        System.out.println("\n[測試處理配送]");
+        system.processNextDelivery(); 
+        system.processNextDelivery(); 
+
+        System.out.println("\n[測試 Undo 撤回]");
+        system.undoLastDelivery();
+
+        System.out.println("\n[測試重新處理配送]");
+        system.processNextDelivery(); 
+        system.processNextDelivery(); 
+
+        System.out.println("\n[測試邊界條件]");
+        system.processNextDelivery();
+
+        system.printStatistics();
+    }
 }
 
 
