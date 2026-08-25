@@ -178,7 +178,44 @@ class TaskLinkedList {
 public class LinkedTaskListSystem {
 
     public static void main(String[] args) {
-        
+        System.out.println("LinkedTaskListSystem test \n");
+        TaskLinkedList list = new TaskLinkedList();
+
+        System.out.println("空 List 狀態與搜尋/刪除");
+        list.printAll();
+        System.out.println("嘗試在空清單中刪除 T001: " + list.removeById("T001"));
+        System.out.println("嘗試在空清單中尋找 T001: " + list.findById("T001"));
+
+        System.out.println("\n addFirst & addLast");
+        list.addLast(new Task("T002", "撰寫報告"));
+        list.addFirst(new Task("T001", "開會確認需求"));  
+        list.addLast(new Task("T004", "佈署系統"));     
+        list.printAll();
+
+        System.out.println("\n 指定位置插入與重複ID");
+        list.insertAfter("T002", new Task("T003", "進行單元測試")); 
+        list.addLast(new Task("T001", "重複的 T001")); 
+        list.printAll();
+
+        System.out.println("\n 搜尋節點findById");
+        System.out.println("搜尋存在 ID [T003]: " + list.findById("T003"));
+        System.out.println("搜尋不存在 ID [T999]: " + list.findById("T999"));
+
+        System.out.println("\n 刪除中間節點removeById T002");
+        list.removeById("T002");
+        list.printAll();
+
+        System.out.println("\n 刪除頭節點removeById T001Head");
+        list.removeById("T001");
+        list.printAll();
+
+        System.out.println("\n 刪除尾節點removeById T004Tail");
+        list.removeById("T004");
+        list.printAll();
+
+        System.out.println("\n 清空清單");
+        list.removeById("T003"); 
+        list.printAll();
     }
 }
 
