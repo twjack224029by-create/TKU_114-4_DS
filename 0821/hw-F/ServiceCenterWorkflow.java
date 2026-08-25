@@ -122,7 +122,68 @@ public class ServiceCenterWorkflow {
         return ticket;
     }
 
+    public void printSummary() {
+        System.out.println("\n 當日運作摘要");
+        System.out.println("總抽牌次數: " + ticketMap.size());
+        System.out.println("等待中人數: " + waitingQueue.size());
+        System.out.println("完成服務數: " + completedStack.size());
 
+        long countWaiting = ticketMap.values().stream().filter(t -> "WAITING".equals(t.getStatus())).count();
+        long countCompleted = ticketMap.values().stream().filter(t -> "COMPLETED".equals(t.getStatus())).count();
+        long countCancelled = ticketMap.values().stream().filter(t -> "CANCELLED".equals(t.getStatus())).count();
 
-  
+        System.out.println("狀態分類統計: [WAITING: " + countWaiting + ", COMPLETED: " + countCompleted + ", CANCELLED: " + countCancelled + "]");
+    }
+
+    public void printStatus() {
+        System.out.println("   [Waiting Queue]: " + waitingQueue);
+        System.out.println("   [Completed Stack]: " + completedStack);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("ServiceCenterWorkflow test \n");
+        ServiceCenterWorkflow center = new ServiceCenterWorkflow();
+
+        center.createTicket("A001", "開戶服務");
+        center.createTicket("A002", "外匯申辦");
+        center.createTicket("A003", "信用卡諮詢");
+
+        System.out.println("\n[測試 1: 重複 ID 建立]");
+        center.createTicket("A001", "重複的 A001");
+
+        System.out.println("\n 叫號處理");
+        center.processNext(); 
+        center.processNext(); 
+
+        System.out.println("\n 取消失敗情境");
+        center.cancelWaiting("A999");
+        center.cancelWaiting("A001"); 
+
+        System.out.println("\n 取消等待中的號碼");
+        center.cancelWaiting("A003"); 
+
+        System.out.println("\n 補抽牌並處理");
+        center.createTicket("A004", "貸款諮詢");
+        center.createTicket("A005", "存摺補登");
+        center.processNext(); 
+        center.processNext(); 
+
+        System.out.println("\n 連續兩次Undo");
+        center.undoLastCompletion(); 
+        center.undoLastCompletion(); 
+
+        System.out.println("\n Undo後重新叫號驗證");
+        center.processNext();
+        center.processNext(); 
+
+        System.out.println("\n 空Queue與Stack邊界");
+        center.processNext(); 
+        center.undoLastCompletion(); 
+        center.undoLastCompletion(); 
+        center.undoLastCompletion(); 
+        center.undoLastCompletion(); 
+        center.undoLastCompletion(); 
+
+        center.printSummary();
+    }
 }
