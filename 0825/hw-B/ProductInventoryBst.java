@@ -53,7 +53,8 @@ class ProductNode {
 }
 
 public class ProductInventoryBst {
-  private ProductNode root;
+
+    private ProductNode root;
 
     public ProductInventoryBst() {
         this.root = null;
@@ -112,14 +113,13 @@ public class ProductInventoryBst {
 
     public boolean restock(String productId, int quantity) {
         if (quantity <= 0) {
-            System.out.println("失敗.補貨數量必須大於 0");
+            System.out.println("失敗,補貨數量必須大於 0");
             return false;
         }
 
-        // 先尋找物件
         Product product = searchById(productId);
         if (product == null) {
-            System.out.println("失敗.找不到商品編號 [" + productId + "]");
+            System.out.println("失敗,找不到商品編號 [" + productId + "]");
             return false;
         }
 
@@ -146,7 +146,7 @@ public class ProductInventoryBst {
         }
 
         product.setStock(product.getStock() - quantity);
-        System.out.println("-> 扣庫成功 [" + productId + " " + product.getName() + "]: 扣除 " + quantity + " 件，剩餘庫存: " + product.getStock() + " 件");
+        System.out.println("成功 [" + productId + " " + product.getName() + "]: 扣除 " + quantity + " 件，剩餘庫存: " + product.getStock() + " 件");
         return true;
     }
 
@@ -187,6 +187,61 @@ public class ProductInventoryBst {
         return node;
     }
 
+    public void printInOrderReport() {
+        List<Product> products = new ArrayList<>();
+        inOrderHelper(root, products);
 
+        System.out.println("\n 全館商品庫存報表");
+        if (products.isEmpty()) {
+            System.out.println("[ 目前無任何庫存商品資料 ]");
+        } else {
+            for (Product p : products) {
+                System.out.println("  " + p);
+            }
+        }
+    }
 
+    private void inOrderHelper(ProductNode node, List<Product> list) {
+        if (node == null) return;
+        inOrderHelper(node.left, list);
+        list.add(node.product);
+        inOrderHelper(node.right, list);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("ProductInventoryBst \n");
+
+        ProductInventoryBst inventory = new ProductInventoryBst();
+
+        System.out.println("商品上架測試");
+        inventory.insert(new Product("P103", "無線滑鼠", 850, 50));
+        inventory.insert(new Product("P101", "機械鍵盤", 2500, 20));
+        inventory.insert(new Product("P105", "4K 螢幕", 12000, 10));
+        inventory.insert(new Product("P102", "電競耳機", 1800, 30));
+        inventory.insert(new Product("P104", "USB-C Hub", 990, 15));
+
+        System.out.println("\n 測試重複 ID 上架");
+        inventory.insert(new Product("P103", "重複的滑鼠", 500, 100));
+
+        inventory.printInOrderReport();
+
+        System.out.println("商品查詢測試");
+        Product p = inventory.searchById("P102");
+        System.out.println("查詢 P102 結果: " + (p != null ? p : "查無此商品"));
+
+        Product pNotFound = inventory.searchById("P999");
+        System.out.println("查詢 P999 結果: " + (pNotFound != null ? pNotFound : "查無此商品"));
+
+        System.out.println("\n【步驟 4: 補貨與扣庫存測試】");
+        inventory.restock("P101", 10); 
+        inventory.deduct("P103", 20);  
+
+        inventory.deduct("P105", 50);  
+
+        System.out.println("\n 架刪除商品測試");
+        inventory.delete("P104"); 
+        inventory.delete("P103"); 
+
+        inventory.printInOrderReport();
+    }
 }
