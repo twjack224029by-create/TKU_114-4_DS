@@ -82,4 +82,63 @@ public class OrderBstSystem {
         }
         return node;
     }
+
+    public Order findOrder(String orderId) {
+        if (orderId == null || orderId.isBlank()) return null;
+        OrderNode node = searchHelper(root, orderId);
+        return (node != null) ? node.order : null;
+    }
+
+    private OrderNode searchHelper(OrderNode node, String orderId) {
+        if (node == null) return null;
+
+        int cmp = orderId.compareTo(node.order.getOrderId());
+        if (cmp == 0) {
+            return node;
+        } else if (cmp < 0) {
+            return searchHelper(node.left, orderId);
+        } else {
+            return searchHelper(node.right, orderId);
+        }
+    }
+
+    public boolean cancelOrder(String orderId) {
+        if (findOrder(orderId) == null) {
+            System.out.println("失敗,找不到訂單編號 [" + orderId + "]");
+            return false;
+        }
+
+        root = deleteHelper(root, orderId);
+        System.out.println("成功取消訂單: 編號 [" + orderId + "]");
+        return true;
+    }
+
+    private OrderNode deleteHelper(OrderNode node, String orderId) {
+        if (node == null) return null;
+
+        int cmp = orderId.compareTo(node.order.getOrderId());
+        if (cmp < 0) {
+            node.left = deleteHelper(node.left, orderId);
+        } else if (cmp > 0) {
+            node.right = deleteHelper(node.right, orderId);
+        } else {
+
+            if (node.left == null) return node.right;
+            if (node.right == null) return node.left;
+
+            OrderNode minNode = getMin(node.right);
+            node.order = minNode.order;
+            node.right = deleteHelper(node.right, minNode.order.getOrderId());
+        }
+        return node;
+    }
+
+    private OrderNode getMin(OrderNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
+    
 }
