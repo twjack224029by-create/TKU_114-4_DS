@@ -140,5 +140,53 @@ public class OrderBstSystem {
         return node;
     }
 
+     public boolean updateAmount(String orderId, double newAmount) {
+        if (newAmount < 0) {
+            System.out.println("失敗,訂單金額不可為負數");
+            return false;
+        }
+
+        Order order = findOrder(orderId);
+        if (order == null) {
+            System.out.println("失敗,找不到訂單編號 [" + orderId + "]");
+            return false;
+        }
+
+        double oldAmount = order.getAmount();
+        order.setAmount(newAmount);
+        System.out.printf("成功更新訂單 [%s] 金額: $%,10.2f ➔ $%,10.2f%n", orderId, oldAmount, newAmount);
+        return true;
+    }
+
+    public void printRangeReport(String startId, String endId) {
+        System.out.println("\n訂單報表 [" + startId + " ~ " + endId + "]");
+        List<Order> list = new ArrayList<>();
+        rangeSearchHelper(root, startId, endId, list);
+
+        if (list.isEmpty()) {
+            System.out.println("該區間內無任何訂單紀錄");
+        } else {
+            for (Order ord : list) {
+                System.out.println("  " + ord);
+            }
+        }
+    }
+
+    private void rangeSearchHelper(OrderNode node, String startId, String endId, List<Order> list) {
+        if (node == null) return;
+
+        if (node.order.getOrderId().compareTo(startId) > 0) {
+            rangeSearchHelper(node.left, startId, endId, list);
+        }
+
+        if (node.order.getOrderId().compareTo(startId) >= 0 && node.order.getOrderId().compareTo(endId) <= 0) {
+            list.add(node.order);
+        }
+
+        if (node.order.getOrderId().compareTo(endId) < 0) {
+            rangeSearchHelper(node.right, startId, endId, list);
+        }
+    }
+
     
 }
