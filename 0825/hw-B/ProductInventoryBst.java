@@ -80,5 +80,113 @@ public class ProductInventoryBst {
         }
     }
 
+    public boolean insert(Product product) {
+        if (product == null || product.getProductId() == null) {
+            System.out.println("失敗,無效的商品資料");
+            return false;
+        }
+
+        if (searchById(product.getProductId()) != null) {
+            System.out.println("失敗,商品編號 [" + product.getProductId() + "] 已存在，不得重複新增");
+            return false;
+        }
+
+        root = insertHelper(root, product);
+        System.out.println("成功上架商品: " + product);
+        return true;
+    }
+
+    private ProductNode insertHelper(ProductNode node, Product product) {
+        if (node == null) {
+            return new ProductNode(product);
+        }
+
+        int cmp = product.getProductId().compareTo(node.product.getProductId());
+        if (cmp < 0) {
+            node.left = insertHelper(node.left, product);
+        } else if (cmp > 0) {
+            node.right = insertHelper(node.right, product);
+        }
+        return node;
+    }
+
+    public boolean restock(String productId, int quantity) {
+        if (quantity <= 0) {
+            System.out.println("失敗.補貨數量必須大於 0");
+            return false;
+        }
+
+        // 先尋找物件
+        Product product = searchById(productId);
+        if (product == null) {
+            System.out.println("失敗.找不到商品編號 [" + productId + "]");
+            return false;
+        }
+
+        product.setStock(product.getStock() + quantity);
+        System.out.println("補貨成功 [" + productId + " " + product.getName() + "]: 增加 " + quantity + " 件，目前庫存: " + product.getStock() + " 件");
+        return true;
+    }
+
+    public boolean deduct(String productId, int quantity) {
+        if (quantity <= 0) {
+            System.out.println("失敗,扣除數量必須大於 0");
+            return false;
+        }
+
+        Product product = searchById(productId);
+        if (product == null) {
+            System.out.println("失敗,找不到商品編號 [" + productId + "]");
+            return false;
+        }
+
+        if (product.getStock() < quantity) {
+            System.out.println("失敗 [" + productId + " " + product.getName() + "]: 庫存不足！現有: " + product.getStock() + " 件，欲扣除: " + quantity + " 件");
+            return false;
+        }
+
+        product.setStock(product.getStock() - quantity);
+        System.out.println("-> 扣庫成功 [" + productId + " " + product.getName() + "]: 扣除 " + quantity + " 件，剩餘庫存: " + product.getStock() + " 件");
+        return true;
+    }
+
+    public boolean delete(String productId) {
+        if (searchById(productId) == null) {
+            System.out.println("失敗,找不到商品編號 [" + productId + "]");
+            return false;
+        }
+
+        root = deleteHelper(root, productId);
+        System.out.println("成功下架商品: 編號 [" + productId + "]");
+        return true;
+    }
+
+    private ProductNode deleteHelper(ProductNode node, String productId) {
+        if (node == null) return null;
+
+        int cmp = productId.compareTo(node.product.getProductId());
+        if (cmp < 0) {
+            node.left = deleteHelper(node.left, productId);
+        } else if (cmp > 0) {
+            node.right = deleteHelper(node.right, productId);
+        } else {
+            if (node.left == null) return node.right;
+            if (node.right == null) return node.left;
+
+            ProductNode minNode = getMin(node.right);
+            node.product = minNode.product;
+            node.right = deleteHelper(node.right, minNode.product.getProductId());
+        }
+        return node;
+    }
+
+    private ProductNode getMin(ProductNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
+
 
 }
