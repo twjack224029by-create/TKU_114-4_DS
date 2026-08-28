@@ -188,5 +188,68 @@ public class OrderBstSystem {
         }
     }
 
-    
+    public void printSummary() {
+        List<Order> allOrders = new ArrayList<>();
+        inOrderHelper(root, allOrders);
+
+        double totalAmount = 0.0;
+        for (Order o : allOrders) {
+            totalAmount += o.getAmount();
+        }
+
+        System.out.println("\nSummary");
+        System.out.println("  * 總訂單筆數 : " + allOrders.size() + " 筆");
+        System.out.printf("  * 總營運金額 : $%,.2f%n", totalAmount);
+        if (allOrders.isEmpty()) {
+            System.out.println("目前無任何訂單");
+        } else {
+            for (Order o : allOrders) {
+                System.out.println("  " + o);
+            }
+        }
+    }
+
+    private void inOrderHelper(OrderNode node, List<Order> list) {
+        if (node == null) return;
+        inOrderHelper(node.left, list);
+        list.add(node.order);
+        inOrderHelper(node.right, list);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("OrderBstSystem\n");
+
+        OrderBstSystem system = new OrderBstSystem();
+
+        System.out.println("建立新訂單");
+        system.addOrder(new Order("ORD-103", "Alice", 1250.0));
+        system.addOrder(new Order("ORD-101", "Bob", 3200.0));
+        system.addOrder(new Order("ORD-105", "Charlie", 850.5));
+        system.addOrder(new Order("ORD-102", "David", 4500.0));
+        system.addOrder(new Order("ORD-104", "Eve", 2100.0));
+
+        System.out.println("\n重複訂單新增測試");
+        system.addOrder(new Order("ORD-103", "Duplicate Alice", 9999.0));
+
+        system.printSummary();
+
+        System.out.println("查詢訂單");
+        Order ord = system.findOrder("ORD-102");
+        System.out.println("查詢 ORD-102 結果: " + (ord != null ? ord : "查無此訂單"));
+
+        Order notFound = system.findOrder("ORD-999");
+        System.out.println("查詢 ORD-999 結果: " + (notFound != null ? notFound : "查無此訂單"));
+
+        System.out.println("\n更新訂單金額");
+        system.updateAmount("ORD-101", 3800.0); 
+        system.updateAmount("ORD-999", 500.0); 
+
+        System.out.println("\n區間報表測試ORD-102 ~ ORD-104");
+        system.printRangeReport("ORD-102", "ORD-104");
+
+        System.out.println("取消訂單測試");
+        system.cancelOrder("ORD-102"); 
+
+        system.printSummary();
+    } 
 }
