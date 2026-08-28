@@ -107,13 +107,12 @@ class BinarySearchTree {
 }
 
 public class BstDeleteTestSuite {
-    public class BstDeleteTestSuite {
 
     private static int testCount = 0;
     private static int passedCount = 0;
 
     public static void main(String[] args) {
-        System.out.println("二元搜尋樹Delete完整單元測試套件");
+        System.out.println("二元搜尋樹 Delete 完整單元測試套件");
 
         testEmptyTreeDelete();
         testMissingKeyDelete();
@@ -124,7 +123,6 @@ public class BstDeleteTestSuite {
 
         System.out.printf(" 測試總結: 通過 %d / %d 個測試案例%n", passedCount, testCount);
     }
-
 
     private static void assertState(String testName, boolean success, List<Integer> expectedList, List<Integer> actualList) {
         testCount++;
@@ -169,10 +167,10 @@ public class BstDeleteTestSuite {
         assertState("刪除唯一根節點 50 後樹應變為空", deleted && bst.isEmpty(), List.of(), bst.toInOrderList());
         System.out.println();
     }
-        
+
     private static void testRootWithOneChildDelete() {
         System.out.println("Root with One Child");
-
+        
         BinarySearchTree bstA = new BinarySearchTree();
         bstA.insert(50);
         bstA.insert(70);
@@ -189,5 +187,36 @@ public class BstDeleteTestSuite {
 
         System.out.println();
     }
-        
+
+    private static void testRootWithTwoChildrenDelete() {
+        System.out.println("Root with Two Children");
+        BinarySearchTree bst = new BinarySearchTree();
+
+        int[] nodes = {50, 30, 70, 20, 40, 60, 80};
+        for (int val : nodes) bst.insert(val);
+
+        boolean deleted = bst.delete(50);
+        assertState("刪除擁有兩個子節點的 Root (50)", deleted, List.of(20, 30, 40, 60, 70, 80), bst.toInOrderList());
+        assertState("新的 Root 值應更換為 60", bst.getRoot() != null && bst.getRoot().val == 60, List.of(20, 30, 40, 60, 70, 80), bst.toInOrderList());
+
+        System.out.println();
+    }
+
+    private static void testSequentialDeleteToEmpty() {
+        System.out.println("Sequential Delete");
+        BinarySearchTree bst = new BinarySearchTree();
+        int[] elements = {40, 20, 60, 10, 30, 50, 70};
+        for (int val : elements) bst.insert(val);
+
+        int[] deleteOrder = {30, 10, 20, 70, 60, 50, 40}; 
+        boolean allSuccess = true;
+
+        for (int val : deleteOrder) {
+            boolean res = bst.delete(val);
+            if (!res) allSuccess = false;
+        }
+
+        assertState("按順序刪除所有節點後，樹應為 Empty 且大小為 0", allSuccess && bst.isEmpty() && bst.size() == 0, List.of(), bst.toInOrderList());
+        System.out.println();
+    }
 }
