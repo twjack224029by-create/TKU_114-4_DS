@@ -125,5 +125,48 @@ public class OrderManagementBst {
         return true;
     }
 
+    public boolean remove(int orderId) {
+        Order order = find(orderId);
+        if (order == null) {
+            System.out.println("失敗,查無訂單編號 #" + orderId);
+            return false;
+        }
+
+        if (order.getStatus() != OrderStatus.CANCELLED) {
+            System.out.println("失敗,訂單編號 #" + orderId + " 當前狀態為 " 
+                    + order.getStatus() + "，只有CANCELLED訂單才可刪除");
+            return false;
+        }
+
+        root = removeRecursive(root, orderId);
+        System.out.println("成功,已自系統中永久移除取消的訂單編號 #" + orderId);
+        return true;
+    }
+
+    private OrderNode removeRecursive(OrderNode current, int orderId) {
+        if (current == null) return null;
+
+        if (orderId < current.order.getOrderId()) {
+            current.left = removeRecursive(current.left, orderId);
+        } else if (orderId > current.order.getOrderId()) {
+            current.right = removeRecursive(current.right, orderId);
+        } else {
+            if (current.left == null) return current.right;
+            if (current.right == null) return current.left;
+
+            OrderNode minNode = findMin(current.right);
+            current.order = minNode.order;
+            current.right = removeRecursive(current.right, minNode.order.getOrderId());
+        }
+        return current;
+    }
+
+    private OrderNode findMin(OrderNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
 }
 
