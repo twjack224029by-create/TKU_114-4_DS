@@ -168,5 +168,49 @@ public class OrderManagementBst {
         return node;
     }
 
+    public void idRangeReport(int minId, int maxId) {
+        System.out.println(String.format("訂單ID範圍報表 (範圍: %d ~ %d)", minId, maxId));
+        List<Order> result = new ArrayList<>();
+        idRangeSearchRecursive(root, minId, maxId, result);
+
+        if (result.isEmpty()) {
+            System.out.println("  (該範圍內無任何訂單)");
+        } else {
+            for (Order o : result) {
+                System.out.println("  " + o);
+            }
+        }
+    }
+
+    private void idRangeSearchRecursive(OrderNode current, int minId, int maxId, List<Order> result) {
+        if (current == null) return;
+
+        int id = current.order.getOrderId();
+
+        if (id > minId) {
+            idRangeSearchRecursive(current.left, minId, maxId, result);
+        }
+
+        if (id >= minId && id <= maxId) {
+            result.add(current.order);
+        }
+
+        if (id < maxId) {
+            idRangeSearchRecursive(current.right, minId, maxId, result);
+        }
+    }
+
+    public double getTotalAmount() {
+        return calculateTotalAmountRecursive(root);
+    }
+
+    private double calculateTotalAmountRecursive(OrderNode current) {
+        if (current == null) return 0.0;
+        
+        return current.order.getAmount() 
+                + calculateTotalAmountRecursive(current.left) 
+                + calculateTotalAmountRecursive(current.right);
+    }
+
 }
 
