@@ -85,6 +85,45 @@ public class OrderManagementBst {
         return current;
     }
 
+    public Order find(int orderId) {
+        OrderNode node = findRecursive(root, orderId);
+        return (node != null) ? node.order : null;
+    }
+
+    private OrderNode findRecursive(OrderNode current, int orderId) {
+        if (current == null) return null;
+        if (orderId == current.order.getOrderId()) return current;
+        return (orderId < current.order.getOrderId()) 
+                ? findRecursive(current.left, orderId) 
+                : findRecursive(current.right, orderId);
+    }
+
+    public boolean updateStatus(int orderId, OrderStatus newStatus) {
+        Order order = find(orderId);
+        if (order == null) {
+            System.out.println("失敗,查無訂單編號 #" + orderId);
+            return false;
+        }
+        OrderStatus oldStatus = order.getStatus();
+        order.setStatus(newStatus);
+        System.out.println("更新,訂單編號 #" + orderId + " 狀態由 " + oldStatus + " 變更為 " + newStatus);
+        return true;
+    }
+
+    public boolean cancel(int orderId) {
+        Order order = find(orderId);
+        if (order == null) {
+            System.out.println("失敗,查無訂單編號 #" + orderId);
+            return false;
+        }
+        if (order.getStatus() == OrderStatus.COMPLETED) {
+            System.out.println("失敗,訂單編號 #" + orderId + " 已完成交易，無法取消");
+            return false;
+        }
+        order.setStatus(OrderStatus.CANCELLED);
+        System.out.println("成功,訂單編號 #" + orderId + " 已變更狀態為 CANCELLED");
+        return true;
+    }
 
 }
 
