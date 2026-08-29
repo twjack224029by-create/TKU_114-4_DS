@@ -149,5 +149,81 @@ public class CourseBstIndex {
         return node;
     }
 
+    public boolean updateCredit(String courseCode, int newCredit) {
+        if (newCredit < 1 || newCredit > 6) {
+            System.out.println("失敗,學分必須在1-6(輸入值: " + newCredit + ")");
+            return false;
+        }
+
+        Course course = findCourse(courseCode);
+        if (course == null) {
+            System.out.println("失敗,找不到課程代碼 [" + courseCode + "]");
+            return false;
+        }
+
+        int oldCredit = course.getCredit();
+        course.setCredit(newCredit);
+        System.out.printf("成功更新課程 [%s] 學分: %d ➔ %d%n", courseCode, oldCredit, newCredit);
+        return true;
+    }
+
+    public void printRangeQuery(String startCode, String endCode) {
+        System.out.println("\n課程代碼範圍查詢 [" + startCode + " ~ " + endCode + "]");
+        List<Course> result = new ArrayList<>();
+        rangeSearchHelper(root, startCode, endCode, result);
+
+        if (result.isEmpty()) {
+            System.out.println("該範圍內無任何課程");
+        } else {
+            for (Course c : result) {
+                System.out.println("  " + c);
+            }
+        }
+    }
+
+    private void rangeSearchHelper(CourseNode node, String startCode, String endCode, List<Course> list) {
+        if (node == null) return;
+
+        if (node.course.getCourseCode().compareTo(startCode) > 0) {
+            rangeSearchHelper(node.left, startCode, endCode, list);
+        }
+
+        if (node.course.getCourseCode().compareTo(startCode) >= 0 && node.course.getCourseCode().compareTo(endCode) <= 0) {
+            list.add(node.course);
+        }
+
+        if (node.course.getCourseCode().compareTo(endCode) < 0) {
+            rangeSearchHelper(node.right, startCode, endCode, list);
+        }
+    }
+
+    public void printSortedReport() {
+        List<Course> list = new ArrayList<>();
+        inOrderHelper(root, list);
+
+        int totalCredits = 0;
+        for (Course c : list) {
+            totalCredits += c.getCredit();
+        }
+
+        System.out.println("\n課程系統排序總表 (Sorted Report)");
+        System.out.println("總課程門數: " + list.size() + " 門");
+        System.out.println("累計總學分: " + totalCredits + " 學分");
+        if (list.isEmpty()) {
+            System.out.println("目前系統無任何課程");
+        } else {
+            for (Course c : list) {
+                System.out.println("  " + c);
+            }
+        }
+    }
+
+    private void inOrderHelper(CourseNode node, List<Course> list) {
+        if (node == null) return;
+        inOrderHelper(node.left, list);
+        list.add(node.course);
+        inOrderHelper(node.right, list);
+    }
+
   
 }
