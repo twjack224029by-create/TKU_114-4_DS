@@ -212,5 +212,37 @@ public class OrderManagementBst {
                 + calculateTotalAmountRecursive(current.right);
     }
 
+    public static void main(String[] args) {
+        OrderManagementBst system = new OrderManagementBst();
+
+        System.out.println("測試訂單建立與金額邊界驗證");
+        system.add(1005, "Alice", 1250.0);
+        system.add(1002, "Bob", 300.5);
+        system.add(1008, "Charlie", 4500.0);
+        system.add(1001, "David", 890.0);
+        system.add(1006, "Eve", 2100.0);
+        
+        system.add(1009, "Frank", -500.0); 
+
+        System.out.println("\n全系統總金額統計");
+        System.out.printf("目前系統總訂單金額為: $%.2f%n", system.getTotalAmount());
+
+        System.out.println("\n測試狀態更新與取消");
+        system.updateStatus(1005, OrderStatus.PAID);
+        system.updateStatus(1002, OrderStatus.SHIPPED);
+        system.cancel(1001); 
+
+        System.out.println("\n測試刪除約定制約 (Remove Constraint)");
+        system.remove(1005);
+        
+        system.remove(1001);
+
+        System.out.println("\nID Range Report");
+        system.idRangeReport(1002, 1007);
+
+        System.out.println("刪除後的最終總金額統計");
+        System.out.printf("更新後系統總訂單金額為: $%.2f%n", system.getTotalAmount());
+    }
+
 }
 
