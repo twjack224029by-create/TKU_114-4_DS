@@ -225,5 +225,42 @@ public class CourseBstIndex {
         inOrderHelper(node.right, list);
     }
 
-  
+    public static void main(String[] args) {
+        System.out.println("CourseBstIndex\n");
+
+        CourseBstIndex system = new CourseBstIndex();
+
+        System.out.println("新增課程");
+        system.addCourse("CS103", "Data Structures", 3);
+        system.addCourse("CS101", "Introduction to CS", 2);
+        system.addCourse("CS201", "Algorithms", 4);
+        system.addCourse("CS102", "Object-Oriented Design", 3);
+        system.addCourse("CS305", "Machine Learning", 3);
+
+        System.out.println("\n測試邊界限制");
+        system.addCourse("CS101", "Duplicate CS", 3); 
+        system.addCourse("CS401", "Invalid Credit High", 8); 
+        system.addCourse("CS402", "Invalid Credit Low", 0);  
+
+        system.printSortedReport();
+
+        System.out.println("查詢");
+        Course found = system.findCourse("CS201");
+        System.out.println("查詢 CS201 結果: " + (found != null ? found : "查無此課程"));
+
+        Course notFound = system.findCourse("CS999");
+        System.out.println("查詢 CS999 結果: " + (notFound != null ? notFound : "查無此課程"));
+
+        System.out.println("\n更新學分");
+        system.updateCredit("CS103", 4); 
+        system.updateCredit("CS103", 7); 
+
+        System.out.println("\n範圍查詢");
+        system.printRangeQuery("CS102", "CS201");
+
+        System.out.println("移除課程");
+        system.removeCourse("CS101");
+
+        system.printSortedReport();
+    }
 }
