@@ -91,4 +91,44 @@ public class DirectoryTreeReport {
         }
         return count;
     }
+
+    public static int countDirectories(FileSystemNode node) {
+        if (node == null) return 0;
+        if (node.getType() == NodeType.FILE) return 0;
+
+        int count = 1; 
+        for (FileSystemNode child : node.getChildren()) {
+            count += countDirectories(child);
+        }
+        return count;
+    }
+
+    public static int getHeight(FileSystemNode node) {
+        if (node == null) return 0;
+        int maxHeight = 0;
+        for (FileSystemNode child : node.getChildren()) {
+            maxHeight = Math.max(maxHeight, getHeight(child));
+        }
+        return 1 + maxHeight;
+    }
+
+    public static FileSystemNode findLargestFile(FileSystemNode node) {
+        if (node == null) return null;
+
+        FileSystemNode largest = null;
+        if (node.getType() == NodeType.FILE) {
+            largest = node;
+        }
+
+        for (FileSystemNode child : node.getChildren()) {
+            FileSystemNode candidate = findLargestFile(child);
+            if (candidate != null) {
+                if (largest == null || candidate.getSize() > largest.getSize()) {
+                    largest = candidate;
+                }
+            }
+        }
+        return largest;
+    }
+
 }
