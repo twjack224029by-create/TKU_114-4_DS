@@ -112,5 +112,42 @@ public class CourseBstIndex {
         }
     }
 
+    public boolean removeCourse(String courseCode) {
+        if (findCourse(courseCode) == null) {
+            System.out.println("失敗,找不到課程代碼 [" + courseCode + "]");
+            return false;
+        }
+
+        root = deleteHelper(root, courseCode);
+        System.out.println("成功移除課程: 代碼 [" + courseCode + "]");
+        return true;
+    }
+
+    private CourseNode deleteHelper(CourseNode node, String courseCode) {
+        if (node == null) return null;
+
+        int cmp = courseCode.compareTo(node.course.getCourseCode());
+        if (cmp < 0) {
+            node.left = deleteHelper(node.left, courseCode);
+        } else if (cmp > 0) {
+            node.right = deleteHelper(node.right, courseCode);
+        } else {
+            if (node.left == null) return node.right;
+            if (node.right == null) return node.left;
+
+            CourseNode minNode = getMin(node.right);
+            node.course = minNode.course;
+            node.right = deleteHelper(node.right, minNode.course.getCourseCode());
+        }
+        return node;
+    }
+    
+    private CourseNode getMin(CourseNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
   
 }
