@@ -131,4 +131,63 @@ public class DirectoryTreeReport {
         return largest;
     }
 
+    public static void printTreeStructure(FileSystemNode node, String indent, boolean isLast) {
+        if (node == null) return;
+
+        String marker = isLast ? "└── " : "├── ";
+        String typeIcon = (node.getType() == NodeType.DIRECTORY) ? "資料夾" : "文件";
+        String sizeInfo = String.format("(%,d Bytes)", node.getSize());
+
+        System.out.println(indent + marker + typeIcon + " " + node.getName() + " " + sizeInfo);
+
+        List<FileSystemNode> children = node.getChildren();
+        for (int i = 0; i < children.size(); i++) {
+            boolean lastChild = (i == children.size() - 1);
+            printTreeStructure(children.get(i), indent + (isLast ? "    " : "│   "), lastChild);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("DirectoryTreeReport \n");
+
+        FileSystemNode root = new FileSystemNode("root");
+
+        FileSystemNode src = new FileSystemNode("src");
+        src.addChild(new FileSystemNode("Main.java", 2500));
+        src.addChild(new FileSystemNode("Utils.java", 1800));
+
+        FileSystemNode assets = new FileSystemNode("assets");
+        FileSystemNode images = new FileSystemNode("images");
+        images.addChild(new FileSystemNode("logo.png", 1500000));
+        images.addChild(new FileSystemNode("banner.jpg", 4200000));
+        assets.addChild(images);
+        assets.addChild(new FileSystemNode("config.json", 512));
+
+        root.addChild(src);
+        root.addChild(assets);
+        root.addChild(new FileSystemNode("README.md", 1024));
+
+        System.out.println("Post-order計算每個Directory大小");
+        calculateDirectorySizesPostOrder(root);
+        System.out.println("計算完成 n");
+
+        System.out.println("檔案系統樹結構");
+        printTreeStructure(root, "", true);
+        System.out.println();
+
+        System.out.println("Summary");
+        System.out.printf("Total Nodes: %d 個%n", countTotalNodes(root));
+        System.out.printf("File Count%d 個%n", countFiles(root));
+        System.out.printf("Directory Count: %d 個%n", countDirectories(root));
+        System.out.printf("Tree Height: %d%n", getHeight(root));
+        System.out.printf("Total Size: %,d Bytes%n", root.getSize());
+
+        FileSystemNode largestFile = findLargestFile(root);
+        if (largestFile != null) {
+            System.out.printf("Largest File: %s (%,d Bytes)%n",
+                    largestFile.getName(), largestFile.getSize());
+        } else {
+            System.out.println("Largest File: 無");
+        }
+    }
 }
