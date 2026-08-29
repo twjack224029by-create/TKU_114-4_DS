@@ -38,4 +38,53 @@ class Order {
     }
 }
 
+class OrderNode {
+    Order order;
+    OrderNode left;
+    OrderNode right;
+
+    public OrderNode(Order order) {
+        this.order = order;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class OrderManagementBst {
+    private OrderNode root;
+
+    public OrderManagementBst() {
+        this.root = null;
+    }
+
+    public boolean add(int orderId, String customer, double amount) {
+        if (amount < 0) {
+            System.out.println("失敗,訂單編號 #" + orderId + " 金額 ($" + amount + ") 不可為負");
+            return false;
+        }
+        if (find(orderId) != null) {
+            System.out.println("失敗,訂單編號 #" + orderId + " 已存在");
+            return false;
+        }
+
+        Order newOrder = new Order(orderId, customer, amount);
+        root = addRecursive(root, newOrder);
+        System.out.println("新增成功 " + newOrder);
+        return true;
+    }
+
+    private OrderNode addRecursive(OrderNode current, Order order) {
+        if (current == null) {
+            return new OrderNode(order);
+        }
+        if (order.getOrderId() < current.order.getOrderId()) {
+            current.left = addRecursive(current.left, order);
+        } else if (order.getOrderId() > current.order.getOrderId()) {
+            current.right = addRecursive(current.right, order);
+        }
+        return current;
+    }
+
+
+}
 
