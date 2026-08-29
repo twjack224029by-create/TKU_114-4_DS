@@ -110,3 +110,85 @@ class BinarySearchTree {
         return root;
     }
 }
+
+public class CompleteBstTestSuite {
+
+    private static int totalTests = 0;
+    private static int passedTests = 0;
+    private static int failedTests = 0;
+
+    private static void check(String description, boolean condition) {
+        totalTests++;
+        if (condition) {
+            passedTests++;
+            System.out.printf("[ PASS ] Test %02d: %s%n", totalTests, description);
+        } else {
+            failedTests++;
+            System.err.printf("[ FAIL ] Test %02d: %s%n", totalTests, description);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Complete Binary Search Tree Test Suite");
+
+        BinarySearchTree bst = new BinarySearchTree();
+
+        System.out.println("Empty Tree");
+        check("Empty tree size should be 0", bst.size() == 0);
+        check("Search on empty tree returns false", !bst.search(50));
+        check("Delete on empty tree returns false", !bst.delete(50));
+        check("Empty tree BST invariant holds true", bst.isBstInvariantValid());
+
+        System.out.println("\n--- [ Category 2: Insert & Duplicate ] ---");
+        check("Insert root (50)", bst.insert(50));
+        check("Tree size is 1 after root insertion", bst.size() == 1);
+        check("Insert left child (30)", bst.insert(30));
+        check("Insert right child (70)", bst.insert(70));
+        check("Insert duplicate key (50) returns false", !bst.insert(50));
+        check("Insert duplicate key (30) returns false", !bst.insert(30));
+
+        bst.insert(20);
+        bst.insert(40);
+        bst.insert(60);
+        bst.insert(80);
+
+        System.out.println("\nSearch & Missing");
+        check("Search existing leaf node (20)", bst.search(20));
+        check("Search existing internal node (30)", bst.search(30));
+        check("Search non-existing key (99)", !bst.search(99));
+        check("Search non-existing key (-10)", !bst.search(-10));
+
+        System.out.println("\nRange Search & Invariant");
+        check("BST invariant is valid", bst.isBstInvariantValid());
+        List<Integer> rangeResult = bst.rangeSearch(25, 65);
+        check("Range search [25, 65] count is correct (30, 40, 50, 60)", rangeResult.size() == 4);
+        check("Range search contents valid", rangeResult.containsAll(List.of(30, 40, 50, 60)));
+
+        System.out.println("\nNode Deletion Scenarios");
+
+        check("Delete leaf node (20)", bst.delete(20));
+        check("Node 20 no longer exists", !bst.search(20));
+        check("BST invariant valid after deleting leaf", bst.isBstInvariantValid());
+
+        bst.insert(25); 
+        check("Delete node with one child (30)", bst.delete(30));
+        check("Node 25 successfully re-linked", bst.search(25));
+
+        check("Delete node with two children (70)", bst.delete(70));
+        check("Node 70 no longer exists", !bst.search(70));
+        check("Children (60, 80) remain accessible", bst.search(60) && bst.search(80));
+
+        check("Delete root node (50)", bst.delete(50));
+        check("Old root (50) is gone", !bst.search(50));
+        check("New root replaced and BST invariant valid", bst.isBstInvariantValid());
+
+        System.out.printf("  Test Execution Summary: Total: %d | PASS: %d | FAIL: %d%n",
+                totalTests, passedTests, failedTests);
+
+        if (failedTests == 0) {
+            System.out.println("ALL BST TEST ASSERTIONS PASSED!");
+        } else {
+            System.err.println("SOME TESTS FAILED. PLEASE CHECK LOGS ABOVE.");
+        }
+    }
+}
