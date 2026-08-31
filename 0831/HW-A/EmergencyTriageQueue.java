@@ -40,3 +40,55 @@ class Patient {
                 medicalRecordId, name, getTriageLevelName(), sequenceNumber);
     }
 }
+
+public class EmergencyTriageQueue {
+    private PriorityQueue<Patient> queue;
+    private long globalSequenceCounter; 
+
+    public EmergencyTriageQueue() {
+        Comparator<Patient> stableComparator = (p1, p2) -> {
+            if (p1.getTriageLevel() != p2.getTriageLevel()) {
+                return Integer.compare(p1.getTriageLevel(), p2.getTriageLevel());
+            }
+            return Long.compare(p1.getSequenceNumber(), p2.getSequenceNumber());
+        };
+
+        this.queue = new PriorityQueue<>(stableComparator);
+        this.globalSequenceCounter = 0;
+    }
+
+    public void registerPatient(String medicalRecordId, String name, int triageLevel) {
+        globalSequenceCounter++;
+        Patient patient = new Patient(medicalRecordId, name, triageLevel, globalSequenceCounter);
+        queue.offer(patient);
+        System.out.println("報到成功" + patient);
+    }
+
+    public Patient peekNextPatient() {
+        if (queue.isEmpty()) {
+            System.out.println("目前候診為空，無等待中病人。");
+            return null;
+        }
+        Patient next = queue.peek();
+        System.out.println("下一位" + next);
+        return next;
+    }
+
+    public Patient callNextPatient() {
+        if (queue.isEmpty()) {
+            System.out.println("失敗,目前候診為空");
+            return null;
+        }
+        Patient calledPatient = queue.poll();
+        System.out.println("請病人" + calledPatient + " 進入");
+        return calledPatient;
+    }
+    
+    public int getWaitingCount() {
+        return queue.size();
+    }
+
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+}
