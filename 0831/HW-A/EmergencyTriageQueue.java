@@ -91,4 +91,40 @@ public class EmergencyTriageQueue {
     public boolean isEmpty() {
         return queue.isEmpty();
     }
+
+    public static void main(String[] args) {
+        EmergencyTriageQueue triageQueue = new EmergencyTriageQueue();
+
+        System.out.println("EmergencyTriageQueue");
+
+        System.out.println("Empty Queue Handling");
+        System.out.println("目前候診人數: " + triageQueue.getWaitingCount() + " 人");
+        triageQueue.peekNextPatient(); 
+        triageQueue.callNextPatient();
+        System.out.println();
+
+        System.out.println("Registering Patients");
+        triageQueue.registerPatient("P101", "張三", 3); 
+        triageQueue.registerPatient("P102", "李四", 1); 
+        triageQueue.registerPatient("P103", "王五", 2); 
+        triageQueue.registerPatient("P104", "趙六", 3); 
+        triageQueue.registerPatient("P105", "孫七", 1); 
+        
+        System.out.println("\n目前總候診人數: " + triageQueue.getWaitingCount() + " 人\n");
+
+        System.out.println("查看下一位病人");
+        triageQueue.peekNextPatient(); 
+        System.out.println();
+
+        System.out.println("Calling Patients");
+        while (!triageQueue.isEmpty()) {
+            System.out.println("剩餘人數: " + triageQueue.getWaitingCount() + " 人");
+            triageQueue.callNextPatient();
+        }
+
+        System.out.println("\n所有病人看完診後，測試空佇列");
+        System.out.println("目前候診人數: " + triageQueue.getWaitingCount() + " 人");
+        triageQueue.callNextPatient(); 
+
+    }
 }
