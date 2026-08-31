@@ -101,8 +101,45 @@ public class ArrayMinHeap {
     public int getCapacity() { return heap.length; }
 
   public static void main(String[] args) {
-    
-  }
+    ArrayMinHeap minHeap = new ArrayMinHeap(4);
 
-  
+        System.out.println("               ArrayMinHeap");
+
+        int[] testData = {
+            45, 12, 89, 7, 3, 99, 23, 1, 56, 34,
+            -5, 78, 12, 67, 8, 90, 11, 2, 4, 100,
+            -15, 50
+        };
+
+        System.out.println("開始連續插入 " + testData.length + " 筆資料");
+        for (int val : testData) {
+            minHeap.add(val);
+        }
+
+        System.out.println("插入完畢,當前Heap總數: " + minHeap.size() + "  當前底層陣列容量: " + minHeap.getCapacity());
+
+        System.out.println("測試Peek");
+        System.out.println("目前Heap頂點: " + minHeap.peek());
+
+        System.out.println("\n測試Snapshot");
+        System.out.println("Heap 陣列快照: " + Arrays.toString(minHeap.snapshot()));
+
+        System.out.println("\n連續執行Remove");
+        System.out.println("依序彈出之最小值 sequence:");
+        int count = 0;
+        while (!minHeap.isEmpty()) {
+            count++;
+            int min = minHeap.remove();
+            System.out.printf("[%02d] 彈出: %-4d ", count, min);
+            if (count % 5 == 0) System.out.println(); 
+        }
+        System.out.println("\n");
+
+        System.out.println("測試空Heap");
+        try {
+            minHeap.remove();
+        } catch (NoSuchElementException e) {
+            System.out.println(" Successfully caught expected exception: " + e.getMessage());
+        }
+  }
 }
