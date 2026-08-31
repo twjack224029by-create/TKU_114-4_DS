@@ -38,5 +38,44 @@ public class TopSellingProducts {
         }
         salesMap.put(id, salesMap.getOrDefault(id, 0) + sales);
     }
+
+    public List<Product> getTopK(int k) {
+        if (k <= 0 || salesMap.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        PriorityQueue<Product> minHeap = new PriorityQueue<>((p1, p2) -> {
+            if (p1.getSales() != p2.getSales()) {
+                return Integer.compare(p1.getSales(), p2.getSales());
+            }
+            return p2.getId().compareTo(p1.getId());
+        });
+
+        for (Map.Entry<String, Integer> entry : salesMap.entrySet()) {
+            Product product = new Product(entry.getKey(), entry.getValue());
+            minHeap.offer(product);
+
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+        List<Product> topKList = new ArrayList<>();
+        while (!minHeap.isEmpty()) {
+            topKList.add(minHeap.poll());
+        }
+
+        Collections.sort(topKList, (p1, p2) -> {
+            if (p1.getSales() != p2.getSales()) {
+                return Integer.compare(p2.getSales(), p1.getSales()); 
+            }
+            return p1.getId().compareTo(p2.getId()); 
+        });
+
+        return topKList;
+    }
+
+    public void clear() {
+        salesMap.clear();
+    }
   
 }
