@@ -60,5 +60,49 @@ public class ArrayMinHeap {
         }
     }
 
+   private void siftUp(int index) {
+        int target = heap[index];
+        while (index > 0) {
+            int parentIndex = (index - 1) / 2;
+            if (target >= heap[parentIndex]) {
+                break;
+            }
+            heap[index] = heap[parentIndex];
+            index = parentIndex;
+        }
+        heap[index] = target;
+    }
+
+    private void siftDown(int index) {
+        int target = heap[index];
+        int half = size / 2; 
+
+        while (index < half) {
+            int leftChild = 2 * index + 1;
+            int rightChild = leftChild + 1;
+            int smallest = leftChild;
+
+            if (rightChild < size && heap[rightChild] < heap[leftChild]) {
+                smallest = rightChild;
+            }
+
+            if (target <= heap[smallest]) {
+                break;
+            }
+
+            heap[index] = heap[smallest];
+            index = smallest;
+        }
+        heap[index] = target;
+    }
+
+    public int size() { return size; }
+    public boolean isEmpty() { return size == 0; }
+    public int getCapacity() { return heap.length; }
+
+  public static void main(String[] args) {
+    
+  }
+
   
 }
