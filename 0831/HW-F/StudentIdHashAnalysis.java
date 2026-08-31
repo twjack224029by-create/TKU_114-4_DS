@@ -36,5 +36,43 @@ public class StudentIdHashAnalysis {
         }
     }
 
+  public static AnalysisResult analyze(List<String> studentIds, int bucketCount) {
+        if (bucketCount <= 0) {
+            throw new IllegalArgumentException("Bucket 數量必須大於 0");
+        }
+
+        AnalysisResult result = new AnalysisResult(bucketCount, studentIds.size());
+
+        for (String id : studentIds) {
+            int hashIndex = Math.abs(id.hashCode()) % bucketCount;
+            result.bucketSizes[hashIndex]++;
+        }
+
+        int totalCollisions = 0;
+        int maxChain = 0;
+        int nonZeroBuckets = 0;
+        int sumNonZeroLengths = 0;
+
+        for (int size : result.bucketSizes) {
+            if (size > 0) {
+                nonZeroBuckets++;
+                sumNonZeroLengths += size;
+                if (size > 1) {
+                    totalCollisions += (size - 1);
+                }
+                if (size > maxChain) {
+                    maxChain = size;
+                }
+            }
+        }
+
+        result.totalCollisions = totalCollisions;
+        result.maxChainLength = maxChain;
+        result.nonZeroBuckets = nonZeroBuckets;
+        result.avgChainLength = (nonZeroBuckets == 0) ? 0.0 : (double) sumNonZeroLengths / nonZeroBuckets;
+
+        return result;
+    }
+
   
 }
