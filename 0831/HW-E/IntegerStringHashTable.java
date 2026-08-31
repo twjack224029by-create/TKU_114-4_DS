@@ -165,6 +165,45 @@ public class IntegerStringHashTable {
             }
         }
     }
-  
 
+    public static void main(String[] args) {
+        IntegerStringHashTable table = new IntegerStringHashTable(5);
+
+        System.out.println("Separate Chaining");
+        table.put(10, "Apple");
+        table.put(15, "Banana"); 
+        table.put(20, "Cherry"); 
+        table.put(3, "Dog");
+        table.put(7, "Elephant");
+
+        table.bucketReport();
+
+        System.out.println("測試同Key更新機制");
+        System.out.println("更新前 Size: " + table.size());
+        table.put(15, "Blueberry"); 
+        table.put(10, "Apricot");   
+        System.out.println("更新後 Size: " + table.size() + " (確認 Size 未改變)\n");
+
+        System.out.println("測試get與containsKey");
+        System.out.println("get(15) -> " + table.get(15));
+        System.out.println("get(20) -> " + table.get(20));
+        System.out.println("get(99) -> " + table.get(99)); 
+        System.out.println("containsKey(3) -> " + table.containsKey(3));
+        System.out.println("containsKey(88) -> " + table.containsKey(88));
+
+        System.out.println("\n自動擴容");
+        table.put(42, "Fox");
+        table.put(55, "Grape");
+        table.put(88, "Horse"); 
+
+        table.bucketReport();
+
+        System.out.println("測試remove");
+        table.remove(15); 
+        table.remove(999); 
+
+        System.out.println("\n最終報表");
+        table.bucketReport();
+        System.out.println("最終Hash Table總size: " + table.size());
+    }
 }
