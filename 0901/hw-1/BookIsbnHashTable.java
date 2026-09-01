@@ -168,5 +168,36 @@ public class BookIsbnHashTable {
         System.out.printf(" 摘要: Bucket 使用率 = %d/%d (%.2f%%)  最長衝突鏈長度 = %d%n",
                 activeBuckets, capacity, (activeBuckets * 100.0 / capacity), maxChainLength);
     }
-    
+
+    public static void main(String[] args) {
+        BookIsbnHashTable table = new BookIsbnHashTable(5);
+
+        System.out.println("put / insert ");
+        table.put(new Book("101", "Java 程式設計聖經", "Gosling", 680));
+        table.put(new Book("102", "資料結構實戰", "Knuth", 550));
+        table.put(new Book("103", "演算法視覺化", "Cormen", 720));
+        table.put(new Book("104", "Clean Code 代碼潔癖", "Martin", 600));
+        table.put(new Book("105", "作業系統系統化", "Silberschatz", 800));
+
+        table.bucketReport();
+
+        System.out.println("測試重複 ISBN 更新機制 (put / update)");
+        System.out.println("更新前 Size: " + table.size());
+        table.put(new Book("101", "Java 程式設計聖經 (第2版)", "Gosling", 750));
+        System.out.println("更新後Size: " + table.size() + " (驗證Size不增加)\n");
+
+        System.out.println("測試搜尋功能");
+        Book searchedBook = table.get("101");
+        System.out.println("搜尋結果 (101): " + searchedBook);
+
+        Book notFoundBook = table.get("001");
+        System.out.println("搜尋結果 (不存在 ISBN): " + notFoundBook + "\n");
+
+        System.out.println("測試刪除功能");
+        table.remove("103"); 
+        table.remove("001"); 
+
+        System.out.println("\n最終Hash Table");
+        table.bucketReport();
+    }
 }
