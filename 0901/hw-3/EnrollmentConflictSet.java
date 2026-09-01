@@ -60,5 +60,34 @@ class EnrollmentKey {
 }
 
 public class EnrollmentConflictSet {
-  
+  private Set<EnrollmentKey> uniqueEnrollments;             
+    private List<EnrollmentRecord> duplicateRecords;        
+    private Map<String, Set<String>> studentCourseMap;        
+    private Map<String, Set<String>> courseStudentMap;     
+
+    public EnrollmentConflictSet() {
+        this.uniqueEnrollments = new HashSet<>();
+        this.duplicateRecords = new ArrayList<>();
+        this.studentCourseMap = new HashMap<>();
+        this.courseStudentMap = new HashMap<>();
+    }
+
+    public void processEnrollment(EnrollmentRecord record) {
+        EnrollmentKey key = new EnrollmentKey(record.getStudentId(), record.getCourseId());
+
+        if (!uniqueEnrollments.add(key)) {
+            duplicateRecords.add(record);
+            System.out.printf("重複選課衝突 學生 %s 重複選修 %s (時間: %s)%n",
+                    record.getStudentId(), record.getCourseId(), record.getTimestamp());
+        } else {
+            studentCourseMap.computeIfAbsent(record.getStudentId(), k -> new HashSet<>())
+                             .add(record.getCourseId());
+
+            courseStudentMap.computeIfAbsent(record.getCourseId(), k -> new HashSet<>())
+                             .add(record.getStudentId());
+
+            System.out.printf("成功 學生 %s 成功選修 %s%n", record.getStudentId(), record.getCourseId());
+        }
+    }
+
 }
