@@ -43,3 +43,71 @@ class AccountStats {
     public Set<String> getUniqueIps() { return uniqueIps; }
     public int getUniqueIpCount() { return uniqueIps.size(); }
 }
+
+public class LoginActivityReport {
+
+    private Map<String, AccountStats> accountStatsMap; // Key: username, Value: AccountStats
+
+    public LoginActivityReport() {
+        this.accountStatsMap = new HashMap<>();
+    }
+
+    public void processLogs(List<LoginLog> logs) {
+        for (LoginLog log : logs) {
+            String user = log.getUsername();
+            String ip = log.getIpAddress();
+
+            accountStatsMap.putIfAbsent(user, new AccountStats(user));
+            accountStatsMap.get(user).addLogin(ip);
+        }
+    }
+
+    public void printGeneralReport() {
+        System.out.println("                        使用者登入活動總覽報表");
+        System.out.printf(" %-9s  %-8s  %-12s  %s%n", "帳號", "總登入次數", "獨立IP數", "使用過的IP列表");
+
+        for (AccountStats stats : accountStatsMap.values()) {
+            System.out.printf(" %-15s  %-12d  %-12d  %s%n",
+                    stats.getUsername(),
+                    stats.getTotalLogins(),
+                    stats.getUniqueIpCount(),
+                    stats.getUniqueIps());
+        }
+    }
+
+    public void printAnomalyReport(int maxLoginThreshold, int maxIpThreshold) {
+        System.out.printf("                 異常登入風險分析報告 (門檻: 登入 ≥ %d次 或 IP ≥ %d個)%n", 
+                maxLoginThreshold, maxIpThreshold);
+
+        List<String> suspiciousAccounts = new ArrayList<>();
+
+        for (AccountStats stats : accountStatsMap.values()) {
+            boolean isHighFrequency = stats.getTotalLogins() >= maxLoginThreshold;
+            boolean isMultiIp = stats.getUniqueIpCount() >= maxIpThreshold;
+
+            if (isHighFrequency || isMultiIp) {
+                suspiciousAccounts.add(stats.getUsername());
+                System.out.printf("風險帳號: %s%n", stats.getUsername());
+                System.out.printf("   總登入次數: %d 次 %s%n", 
+                        stats.getTotalLogins(), isHighFrequency ? "(高頻登入)" : "");
+                System.out.printf("   獨立 IP 數量: %d 個 %s%n", 
+                        stats.getUniqueIpCount(), isMultiIp ? "(異地/多IP登入)" : "");
+                System.out.printf("   IP 紀錄: %s%n", stats.getUniqueIps());
+                System.out.println("   建議處置: " + getSuggestedAction(isHighFrequency, isMultiIp));
+            }
+        }
+
+        if (suspiciousAccounts.isEmpty()) {
+            System.out.println("  檢測到符合風險條件的異常帳號。");
+        } else {
+            System.out.printf(" 統計摘要: 共發現 %d 個風險帳號，已列入安全追蹤清單。%n", suspiciousAccounts.size());
+        }
+    }
+
+    private String getSuggestedAction(boolean highFreq, boolean multiIp) {
+        if (highFreq && multiIp) return "強制登出、暫停帳號權限，並進行二次身分驗證 (2FA)。";
+        if (highFreq) return "檢查是否為自動化腳本或暴力破解攻擊 (Brute Force)。";
+        return "發送異地登入安全通知給使用者。";
+    }
+    
+}
