@@ -58,6 +58,36 @@ public class LogisticsWeightedGraph {
         return adjList.containsKey(vertex);
     }
 
+    public boolean addOrUpdateEdge(String source, String destination, double cost) {
+        if (cost < 0) {
+            System.out.printf("失敗,物流成本/權重不可為負(來源: %s ➔ 目的地: %s, 傳入成本: %.1f)%n", 
+                    source, destination, cost);
+            return false;
+        }
+
+        if (!containsVertex(source) || !containsVertex(destination)) {
+            System.out.printf("失敗,站點不存在(來源: \"%s\" [%s], 目的地: \"%s\" [%s])%n",
+                    source, containsVertex(source) ? "存在" : "不存在",
+                    destination, containsVertex(destination) ? "存在" : "不存在");
+            return false;
+        }
+
+        List<Edge> neighbors = adjList.get(source);
+        for (Edge edge : neighbors) {
+            if (edge.getTargetVertex().equals(destination)) {
+                double oldCost = edge.getCost();
+                edge.setCost(cost);
+                System.out.printf("更新成功,路線 %s ➔ %s 成本由 %.1f 更新為 %.1f%n", 
+                        source, destination, oldCost, cost);
+                return true;
+            }
+        }
+
+        neighbors.add(new Edge(destination, cost));
+        System.out.printf("新增邊成功 路線 %s ➔ %s (成本: %.1f)%n", source, destination, cost);
+        return true;
+    }
+
 
 
 }
