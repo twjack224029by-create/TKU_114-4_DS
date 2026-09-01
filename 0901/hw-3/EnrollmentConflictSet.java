@@ -90,4 +90,54 @@ public class EnrollmentConflictSet {
         }
     }
 
+    public void printReport() {
+        System.out.println("                       選課系統重複性與統計分析報表");
+
+        System.out.println("\n 發現之重複選課紀錄 (Duplicate Records):");
+        if (duplicateRecords.isEmpty()) {
+            System.out.println("   (無重複選課紀錄)");
+        } else {
+            for (int i = 0; i < duplicateRecords.size(); i++) {
+                System.out.printf("   [%02d] %s%n", (i + 1), duplicateRecords.get(i));
+            }
+        }
+
+        System.out.println("\n每人修課集合 (Student -> Selected Courses):");
+        for (Map.Entry<String, Set<String>> entry : studentCourseMap.entrySet()) {
+            System.out.printf("   • 學生 [%-8s]: %s (共 %d 門課)%n",
+                    entry.getKey(), entry.getValue(), entry.getValue().size());
+        }
+
+        System.out.println("\n每門課修課人數與名單 (Course -> Enrolled Students):");
+        for (Map.Entry<String, Set<String>> entry : courseStudentMap.entrySet()) {
+            System.out.printf("   • 課程 [%-8s]: 修課人數 = %2d 人  學生清單: %s%n",
+                    entry.getKey(), entry.getValue().size(), entry.getValue());
+        }
+
+        System.out.printf(" 數據統計摘要: 有效選課總人次 = %d  被攔截之重複紀錄 = %d%n",
+                uniqueEnrollments.size(), duplicateRecords.size());
+    }
+
+    public static void main(String[] args) {
+        EnrollmentConflictSet system = new EnrollmentConflictSet();
+
+        System.out.println("開始數據輸入");
+
+        List<EnrollmentRecord> rawRequests = List.of(
+            new EnrollmentRecord("S101", "CS101", "9/1 09:00"),
+            new EnrollmentRecord("S101", "CS102", "9/1 09:00"),
+            new EnrollmentRecord("S102", "CS101", "9/1 09:01"),
+            new EnrollmentRecord("S101", "CS101", "9/1 09:02"), 
+            new EnrollmentRecord("S103", "CS103", "9/1 09:03"),
+            new EnrollmentRecord("S102", "CS102", "9/1 09:04"),
+            new EnrollmentRecord("S103", "CS101", "9/1 09:05"),
+            new EnrollmentRecord("S102", "CS101", "9/1 09:06")  
+        );
+
+        for (EnrollmentRecord req : rawRequests) {
+            system.processEnrollment(req);
+        }
+
+        system.printReport();
+    }
 }
