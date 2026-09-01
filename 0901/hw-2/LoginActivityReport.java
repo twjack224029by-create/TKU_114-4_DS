@@ -109,5 +109,29 @@ public class LoginActivityReport {
         if (highFreq) return "檢查是否為自動化腳本或暴力破解攻擊 (Brute Force)。";
         return "發送異地登入安全通知給使用者。";
     }
-    
+
+    public static void main(String[] args) {
+        LoginActivityReport reporter = new LoginActivityReport();
+
+        List<LoginLog> rawLogs = new ArrayList<>();
+        
+        rawLogs.add(new LoginLog("alice", "192.168.1.10", "2026-03-31 08:00:00"));
+        rawLogs.add(new LoginLog("alice", "192.168.1.10", "2026-03-31 12:30:00"));
+
+        rawLogs.add(new LoginLog("bob", "10.0.0.1", "2026-03-31 09:00:00"));
+        rawLogs.add(new LoginLog("bob", "10.0.0.1", "2026-03-31 09:00:05"));
+        rawLogs.add(new LoginLog("bob", "10.0.0.1", "2026-03-31 09:00:10"));
+        rawLogs.add(new LoginLog("bob", "10.0.0.1", "2026-03-31 09:00:15"));
+        rawLogs.add(new LoginLog("bob", "10.0.0.1", "2026-03-31 09:00:20"));
+
+        rawLogs.add(new LoginLog("charlie", "140.112.1.1", "2026-03-31 10:00:00"));
+        rawLogs.add(new LoginLog("charlie", "211.75.3.2",   "2026-03-31 10:15:00"));
+        rawLogs.add(new LoginLog("charlie", "61.216.9.8",   "2026-03-31 10:30:00"));
+
+        rawLogs.add(new LoginLog("david", "172.16.0.5", "2026-03-31 11:00:00"));
+
+        reporter.processLogs(rawLogs);
+        reporter.printGeneralReport();
+        reporter.printAnomalyReport(4, 3);
+    }    
 }
