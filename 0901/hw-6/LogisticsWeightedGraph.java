@@ -88,6 +88,64 @@ public class LogisticsWeightedGraph {
         return true;
     }
 
+    public boolean removeEdge(String source, String destination) {
+        if (!containsVertex(source) || !containsVertex(destination)) {
+            System.out.printf("失敗,指定站點不存在: %s ➔ %s%n", source, destination);
+            return false;
+        }
+
+        List<Edge> neighbors = adjList.get(source);
+        boolean removed = neighbors.removeIf(edge -> edge.getTargetVertex().equals(destination));
+
+        if (removed) {
+            System.out.printf(" 已刪除物流路線: %s ➔ %s%n", source, destination);
+        } else {
+            System.out.printf("失敗,查無路線: %s ➔ %s%n", source, destination);
+        }
+        return removed;
+    }
+
+    public Double getEdgeCost(String source, String destination) {
+        if (!containsVertex(source) || !containsVertex(destination)) {
+            return null;
+        }
+
+        for (Edge edge : adjList.get(source)) {
+            if (edge.getTargetVertex().equals(destination)) {
+                return edge.getCost();
+            }
+        }
+        return null;
+    }
+
+    public List<Edge> getOutgoingEdges(String vertex) {
+        if (!containsVertex(vertex)) return Collections.emptyList();
+        return new ArrayList<>(adjList.get(vertex));
+    }
+
+    public void printReport() {
+        System.out.println("                     Weighted Graph報表");
+        System.out.printf(" 站點總數: %d  總路線數 (Edges): %d%n", adjList.size(), getTotalEdgesCount());
+
+        List<String> vertices = new ArrayList<>(adjList.keySet());
+        Collections.sort(vertices);
+
+        for (String v : vertices) {
+            List<Edge> edges = adjList.get(v);
+            System.out.printf(" 站點 [%-10s] ➔ 可達目的地 (%d 條): %s%n", 
+                    v, edges.size(), edges.isEmpty() ? "(無出發路線)" : edges);
+        }
+    }
+
+    private int getTotalEdgesCount() {
+        int count = 0;
+        for (List<Edge> edges : adjList.values()) {
+            count += edges.size();
+        }
+        return count;
+    }
+
+
 
 
 }
