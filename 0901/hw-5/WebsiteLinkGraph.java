@@ -112,7 +112,28 @@ public class WebsiteLinkGraph {
     }
 
     public static void main(String[] args) {
-        
+        WebsiteLinkGraph graph = new WebsiteLinkGraph();
+
+        System.out.println("開始建立網站地圖連結");
+
+        graph.addLink("Home", "About");
+        graph.addLink("Home", "Products");
+        graph.addLink("Home", "Blog");
+
+        graph.addLink("Products", "Cart");
+        graph.addLink("Products", "About");
+
+        graph.addLink("Blog", "About");
+        graph.addLink("Blog", "Article_01");
+
+        graph.addLink("About", "Privacy");
+
+        graph.addLink("Article_01", "Privacy");
+
+        graph.printReport();
+
+        System.out.println("個別查詢測試");
+        System.out.println("Home 頁面的外連 (Outgoing Links): " + graph.getOutgoingLinks("Home"));
+        System.out.println("Privacy 頁面的反向連結數 (Incoming Count): " + graph.getIncomingCounts().get("Privacy"));
     }
-    
 }
