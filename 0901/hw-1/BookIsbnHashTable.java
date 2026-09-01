@@ -38,5 +38,54 @@ class BookNode {
 }
 
 public class BookIsbnHashTable {
-  
+  private BookNode[] buckets; 
+    private int size;           
+    private int capacity;      
+
+    public BookIsbnHashTable() {
+        this(7);
+    }
+
+    public BookIsbnHashTable(int capacity) {
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Bucket容量必須大於0");
+        }
+        this.capacity = capacity;
+        this.buckets = new BookNode[capacity];
+        this.size = 0;
+    }
+
+    private int hash(String isbn) {
+        return Math.abs(isbn.hashCode()) % capacity;
+    }
+
+    public void put(Book book) {
+        if (book == null || book.getIsbn() == null) {
+            System.out.println("失敗,無效的書籍資料或ISBN為空");
+            return;
+        }
+
+        String isbn = book.getIsbn();
+        int bucketIndex = hash(isbn);
+        BookNode current = buckets[bucketIndex];
+
+        while (current != null) {
+            if (current.book.getIsbn().equals(isbn)) {
+                current.book.setTitle(book.getTitle());
+                current.book.setAuthor(book.getAuthor());
+                current.book.setPrice(book.getPrice());
+                System.out.println("ISBN: " + isbn + " 之書籍內容已更新");
+                return;
+            }
+            current = current.next;
+        }
+
+        BookNode newNode = new BookNode(book);
+        newNode.next = buckets[bucketIndex];
+        buckets[bucketIndex] = newNode;
+        size++;
+        System.out.println("新增成功 " + book);
+    }
+
+    
 }
