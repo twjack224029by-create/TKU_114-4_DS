@@ -87,5 +87,86 @@ public class BookIsbnHashTable {
         System.out.println("新增成功 " + book);
     }
 
+    public Book get(String isbn) {
+        if (isbn == null) return null;
+        int bucketIndex = hash(isbn);
+        BookNode current = buckets[bucketIndex];
+
+        while (current != null) {
+            if (current.book.getIsbn().equals(isbn)) {
+                return current.book;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+
+    public boolean remove(String isbn) {
+        if (isbn == null) return false;
+        int bucketIndex = hash(isbn);
+        BookNode current = buckets[bucketIndex];
+        BookNode prev = null;
+
+        while (current != null) {
+            if (current.book.getIsbn().equals(isbn)) {
+                if (prev == null) {
+                    buckets[bucketIndex] = current.next;
+                } else {
+                    prev.next = current.next;
+                }
+                size--;
+                System.out.println("已自索引中移除 《" + current.book.getTitle() + "》 (ISBN: " + isbn + ")");
+                return true;
+            }
+            prev = current;
+            current = current.next;
+        }
+
+        System.out.println("失敗,查無ISBN為 " + isbn + " 的書籍。");
+        return false;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public double getLoadFactor() {
+        return (double) size / capacity;
+    }
+
+    public void bucketReport() {
+        System.out.printf("                   圖書ISBN Hash Table結構報表 (Capacity: %d  Size: %d)%n", capacity, size);
+        System.out.printf("                   當前Load Factor: %.2f%n", getLoadFactor());
+
+        int activeBuckets = 0;
+        int maxChainLength = 0;
+
+        for (int i = 0; i < capacity; i++) {
+            System.out.printf(" Bucket %02d ➔ ", i);
+            BookNode current = buckets[i];
+
+            if (current == null) {
+                System.out.println("(Empty)");
+            } else {
+                activeBuckets++;
+                int chainLength = 0;
+                StringBuilder sb = new StringBuilder();
+
+                while (current != null) {
+                    sb.append("《").append(current.book.getTitle()).append("》(").append(current.book.getIsbn()).append(") -> ");
+                    current = current.next;
+                    chainLength++;
+                }
+                sb.append("null");
+                if (chainLength > maxChainLength) {
+                    maxChainLength = chainLength;
+                }
+                System.out.printf("%s (鏈長度: %d)%n", sb.toString(), chainLength);
+            }
+        }
+
+        System.out.printf(" 摘要: Bucket 使用率 = %d/%d (%.2f%%)  最長衝突鏈長度 = %d%n",
+                activeBuckets, capacity, (activeBuckets * 100.0 / capacity), maxChainLength);
+    }
     
 }
