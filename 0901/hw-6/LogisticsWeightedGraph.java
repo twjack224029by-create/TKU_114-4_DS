@@ -145,7 +145,38 @@ public class LogisticsWeightedGraph {
         return count;
     }
 
+    public static void main(String[] args) {
+        LogisticsWeightedGraph graph = new LogisticsWeightedGraph();
 
+        System.out.println("初始化站點");
+        String[] hubs = {"台北總倉", "桃園轉運站", "台中轉運站", "高雄轉運站", "花蓮分倉"};
+        for (String hub : hubs) {
+            graph.addVertex(hub);
+        }
 
+        System.out.println("\n新增與更新路線");
+        graph.addOrUpdateEdge("台北總倉", "桃園轉運站", 150.0);
+        graph.addOrUpdateEdge("台北總倉", "台中轉運站", 350.0);
+        graph.addOrUpdateEdge("桃園轉運站", "台中轉運站", 200.0);
+        graph.addOrUpdateEdge("台中轉運站", "高雄轉運站", 300.0);
+        graph.addOrUpdateEdge("台北總倉", "花蓮分倉", 400.0);
 
+        graph.addOrUpdateEdge("台北總倉", "台中轉運站", 320.0);
+
+        System.out.println("\n測試防呆 (負&不存在點)");
+        graph.addOrUpdateEdge("台中轉運站", "高雄轉運站", -50.0);
+        graph.addOrUpdateEdge("新竹轉運站", "台中轉運站", 100.0);
+        graph.addOrUpdateEdge("台北總倉", "台東分倉", 500.0);
+
+        graph.printReport();
+
+        System.out.println("測試單點查詢與路線移除");
+        Double cost = graph.getEdgeCost("台北總倉", "台中轉運站");
+        System.out.println("查詢 台北總倉 ➔ 台中轉運站 成本: " + cost);
+
+        graph.removeEdge("台北總倉", "花蓮分倉");
+        graph.removeEdge("台北總倉", "高雄轉運站"); 
+
+        graph.printReport();
+    }
 }
