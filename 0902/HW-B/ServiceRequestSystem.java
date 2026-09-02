@@ -112,5 +112,42 @@ public class ServiceRequestSystem {
         return true;
     }
 
+    public void printReport() {
+        System.out.println("                        服務管理系統");
+        System.out.printf(" HashMap 總紀錄數: %d  PriorityQueue 殘留節點數: %d%n", requestMap.size(), priorityQueue.size());
+        for (ServiceRequest req : requestMap.values()) {
+            System.out.println(" " + req);
+        }
+    }
 
+    public static void main(String[] args) {
+        ServiceRequestSystem system = new ServiceRequestSystem();
+
+        System.out.println("送出多筆不同優先級請求");
+        system.submitRequest("REQ-01", "一般用戶密碼重設", 1);
+        system.submitRequest("REQ-02", "VIP客戶交易異常", 5);
+        system.submitRequest("REQ-03", "伺服器 CPU 負載過高", 5);
+        system.submitRequest("REQ-04", "網頁版面微調需求", 2);
+
+        system.printReport();
+
+        System.out.println("測試取消請求與雙重結構");
+        system.cancelRequest("REQ-02");
+        system.cancelRequest("REQ-02");
+
+        System.out.println("\n測試依優先級處理");
+        system.processNextRequest(); 
+        
+        system.processNextRequest();
+
+        System.out.println("\n測試ID查詢");
+        System.out.println("查詢 REQ-01 狀態: " + system.getRequestById("REQ-01"));
+        System.out.println("查詢 REQ-02 狀態: " + system.getRequestById("REQ-02"));
+
+        System.out.println("\n處理剩餘請求與邊界測試");
+        system.processNextRequest(); 
+        system.processNextRequest(); 
+
+        system.printReport();
+    }
 }
