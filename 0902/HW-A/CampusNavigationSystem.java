@@ -103,5 +103,37 @@ public class CampusNavigationSystem {
             System.out.println("   " + String.join(" ➔ ", pathNames));
         }
     }
-    
+    public static void main(String[] args) {
+        CampusNavigationSystem campus = new CampusNavigationSystem();
+
+        System.out.println("HashMap保存地點");
+        campus.addLocation("GATE", "大門口");
+        campus.addLocation("LIB", "中央圖書館");
+        campus.addLocation("ENG", "工程館");
+        campus.addLocation("BUS", "商學館");
+        campus.addLocation("GYM", "綜合體育館");
+        campus.addLocation("DORM", "學生宿舍");
+        campus.addLocation("ISLAND", "湖心亭孤島"); 
+
+        System.out.println("\n建立道路網絡");
+        campus.addRoad("GATE", "LIB");
+        campus.addRoad("GATE", "BUS");
+        campus.addRoad("LIB", "ENG");
+        campus.addRoad("BUS", "ENG");
+        campus.addRoad("BUS", "GYM");
+        campus.addRoad("ENG", "DORM");
+        campus.addRoad("GYM", "DORM");
+
+        System.out.println("\n測試路線搜尋");
+        
+        campus.printNavigation("GATE", "DORM");
+
+        campus.printNavigation("GATE", "GYM");
+
+        campus.printNavigation("LIB", "LIB");
+
+        campus.printNavigation("GATE", "ISLAND");
+
+        campus.printNavigation("GATE", "UNKNOWN");
+    }
 }
