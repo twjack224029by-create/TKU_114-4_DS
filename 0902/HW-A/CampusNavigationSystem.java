@@ -36,5 +36,52 @@ public class CampusNavigationSystem {
         List<String> neighbors2 = roadNetwork.get(loc2);
         if (!neighbors2.contains(loc1)) neighbors2.add(loc1);
     }
+
+  public List<String> findShortestPath(String startId, String targetId) {
+        if (startId == null || targetId == null || 
+            !locations.containsKey(startId) || !locations.containsKey(targetId)) {
+            return List.of();
+        }
+
+        if (startId.equals(targetId)) {
+            return List.of(startId);
+        }
+
+        Queue<String> queue = new ArrayDeque<>();
+        Set<String> visited = new HashSet<>();
+        Map<String, String> previous = new HashMap<>(); 
+
+        queue.offer(startId);
+        visited.add(startId);
+
+        boolean found = false;
+
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+
+            if (current.equals(targetId)) {
+                found = true;
+                break;
+            }
+
+            for (String neighbor : roadNetwork.getOrDefault(current, List.of())) {
+                if (locations.containsKey(neighbor) && visited.add(neighbor)) {
+                    previous.put(neighbor, current); 
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        if (!found && !visited.contains(targetId)) {
+            return List.of();
+        }
+
+        List<String> path = new ArrayList<>();
+        for (String at = targetId; at != null; at = previous.get(at)) {
+            path.add(at);
+        }
+        Collections.reverse(path);
+        return path;
+    }
     
 }
