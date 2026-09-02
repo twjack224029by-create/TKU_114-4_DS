@@ -83,5 +83,25 @@ public class CampusNavigationSystem {
         Collections.reverse(path);
         return path;
     }
+
+  public void printNavigation(String startId, String targetId) {
+        String startName = locations.getOrDefault(startId, startId);
+        String targetName = locations.getOrDefault(targetId, targetId);
+
+        System.out.printf("查詢 從 [%s (%s)] 到 [%s (%s)]%n", startName, startId, targetName, targetId);
+
+        List<String> pathIds = findShortestPath(startId, targetId);
+
+        if (pathIds.isEmpty()) {
+            System.out.println("搜尋結果: 無法到達目的地或指定地點無效。");
+        } else {
+            List<String> pathNames = new ArrayList<>();
+            for (String id : pathIds) {
+                pathNames.add(locations.get(id) + " (" + id + ")");
+            }
+            System.out.printf("最優路線 (經過 %d 個地點, %d 段道路):%n", pathIds.size(), pathIds.size() - 1);
+            System.out.println("   " + String.join(" ➔ ", pathNames));
+        }
+    }
     
 }
