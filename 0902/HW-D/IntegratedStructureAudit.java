@@ -130,6 +130,36 @@ public class IntegratedStructureAudit {
                 "維持使用 List (ArrayList)。");
     }
 
+    public static void main(String[] args) {
+        System.out.println("                   Audit System");
 
+        List<AuditReport> reports = new ArrayList<>();
 
+        reports.add(auditScenario("使用者 ID 登入驗證與查找 (用戶數 100 萬)", 
+                DataStructure.LIST, false, false, false, false, true));
+
+        reports.add(auditScenario("使用者 ID 登入驗證與查找 (最佳配置)", 
+                DataStructure.HASH_TABLE, false, false, false, false, true));
+
+        reports.add(auditScenario("醫院急診室病人看診順序 (高優先級先看)", 
+                DataStructure.LIST, false, false, true, false, false));
+
+        reports.add(auditScenario("醫院急診室病人看診順序 (最佳配置)", 
+                DataStructure.HEAP, false, false, true, false, false));
+
+        reports.add(auditScenario("電商商品價格範圍搜尋 ($100 - $500)", 
+                DataStructure.HASH_TABLE, false, true, false, false, false));
+
+        reports.add(auditScenario("捷運路線轉乘與最短路徑規劃", 
+                DataStructure.LIST, false, false, false, true, false));
+
+        reports.add(auditScenario("辦公室印表機文件列印佇列 (FIFO)", 
+                DataStructure.QUEUE, false, false, false, false, false));
+
+        for (AuditReport report : reports) {
+            report.printResult();
+        }
+
+        System.out.println("                             診斷完成，系統運作正常");
+    }
 }
