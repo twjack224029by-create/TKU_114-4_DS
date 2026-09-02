@@ -113,5 +113,38 @@ public class CoursePlanningGraph {
         }
     }
 
-  
+    public static void main(String[] args) {
+        CoursePlanningGraph graph = new CoursePlanningGraph();
+
+        System.out.println("初始化課");
+        graph.addCourse("CS101", "程式設計導論");
+        graph.addCourse("CS102", "資料結構");
+        graph.addCourse("CS201", "演算法");
+        graph.addCourse("CS202", "作業系統");
+        graph.addCourse("CS301", "分散式系統");
+        graph.addCourse("CS302", "人工智慧");
+        graph.addCourse("MATH101", "微積分");
+        graph.addCourse("ISLAND", "獨立通識課"); 
+
+        System.out.println("\n建立有向先修關係");
+        graph.addPrerequisite("CS101", "CS102");
+        graph.addPrerequisite("CS102", "CS201");
+        graph.addPrerequisite("CS102", "CS202");
+        graph.addPrerequisite("CS201", "CS302");
+        graph.addPrerequisite("CS202", "CS301");
+
+        System.out.println("\n測試DFS");
+        System.out.println("CS101 是否能到達 CS301 " + graph.isReachable("CS101", "CS301")); // true
+        System.out.println("MATH101 是否能到達 CS301 " + graph.isReachable("MATH101", "CS301")); // false
+        System.out.println("CS201 是否能到達 CS101 " + graph.isReachable("CS201", "CS101")); // false (有向性)
+
+        System.out.println("\n測試受影響課程");
+        graph.printAffectedReport("CS101");
+
+        graph.printAffectedReport("CS102");
+
+        graph.printAffectedReport("CS301");
+
+        graph.printAffectedReport("ISLAND");
+    } 
 }
